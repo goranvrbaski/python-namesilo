@@ -37,7 +37,7 @@ class NameSilo:
 
     def check_domain(self, domain_name: str):
         """
-
+        Check if domain name is available
         :param domain_name:
         :return:
         """
@@ -50,6 +50,11 @@ class NameSilo:
             return False
 
     def get_domain_info(self, domain_name: str):
+        """
+        Returns information about specified domain
+        :param domain_name:
+        :return: DomainInfo model from common.models
+        """
         url_extend = "getDomainInfo?version=1&type=xml&key=%s&domain=%s" % (self.__token, domain_name)
         parsed_content = self.__get_content_xml(url_extend)
         check_error_code(self.__get_error_code(parsed_content))
@@ -57,6 +62,7 @@ class NameSilo:
 
     def list_domains(self):
         """
+        List all domains registered with current account
         :return: list of registered domains
         """
         domain_list = []
@@ -67,7 +73,7 @@ class NameSilo:
 
     def register_domain(self, domain_name: str, years: int=1, auto_renew: int=0, private: int=0):
         """
-
+        Register domain name
         :param domain_name: name of domain
         :param years:
         :param auto_renew:
@@ -82,7 +88,7 @@ class NameSilo:
 
     def renew_domain(self, domain_name: str, years: int=1):
         """
-
+        Renew domain name
         :param domain_name:
         :param years:
         :return:
@@ -93,6 +99,10 @@ class NameSilo:
         return True
 
     def get_prices(self):
+        """
+        Returns all supported tld prices
+        :return:
+        """
         url_extend = "getPrices?version=1&type=xml&key=%s" % self.__token
         parsed_content = self.__get_content_xml(url_extend)
         check_error_code(self.__get_error_code(parsed_content))
