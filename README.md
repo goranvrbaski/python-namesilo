@@ -13,8 +13,8 @@ This code is written in Python 3.5.x. If you want to contribute to this project 
 - [ ] checkTransferAvailability: Determine if up to 200 domains can be transferred into your account at this time
 - [x] listDomains: A list of all active domains within your account
 - [x] getDomainInfo: Get essential information on a domain within your account
-- [ ] contactList: View all contact profiles in your account
-- [ ] contactAdd: Add a contact profile to your account
+- [x] contactList: View all contact profiles in your account
+- [x] contactAdd: Add a contact profile to your account
 - [ ] contactUpdate: Update a contact profile in account
 - [ ] contactDelete: Delete a contact profile in account
 - [ ] contactDomainAssociate: Associate contact profiles with a domain
