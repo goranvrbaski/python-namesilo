@@ -1,8 +1,9 @@
-import requests
 import os
-from xml.dom import minidom
-from models import DomainInfo
+import requests
 import xmltodict
+from xml.dom import minidom
+from common.models import DomainInfo
+from common.error_codes import check_error_code
 
 __author__ = 'goran.vrbaski'
 
@@ -23,31 +24,36 @@ class NameSilo:
     def __process_request(self, content):
         return minidom.parseString(content)
 
-    def __get_content(self, url):
-        return self.__process_request(requests.get(os.path.join(self.__base_url, url)).content.decode())
+    def __get_error_code(self, data):
+        return int(data['namesilo']['reply']['code'])
 
     def __get_content_xml(self, url):
-        return xmltodict.parse(requests.get(os.path.join(self.__base_url, url)).content.decode())
+        api_request = requests.get(os.path.join(self.__base_url, url))
+        if api_request.status_code != 200:
+            raise Exception("API responded with status code: %s" % api_request.status_code)
 
-    def check_domains(self, domain_names):
+        content = xmltodict.parse(api_request.content.decode())
+        return content
+
+    def check_domain(self, domain_name: str):
         """
 
-        :param domain_names:
+        :param domain_name:
         :return:
         """
-        available_domains = []
-        url_extend = "checkRegisterAvailability?version=1&type=xml&key=%s&domains=%s" % (self.__token, domain_names)
-        data = self.__get_content(url_extend)
-        get_availabe_domains = data.getElementsByTagName("available")
-        for domain in get_availabe_domains[0].childNodes:
-            available_domains.append(domain.childNodes[0].data)
+        url_extend = "checkRegisterAvailability?version=1&type=xml&key=%s&domains=%s" % (self.__token, domain_name)
+        parsed_content = self.__get_content_xml(url_extend)
+        check_error_code(self.__get_error_code(parsed_content))
+        if 'available' in parsed_content['namesilo']['reply'].keys():
+            return True
+        else:
+            return False
 
-        return available_domains
-
-    def get_domain_info(self, domain_name):
+    def get_domain_info(self, domain_name: str):
         url_extend = "getDomainInfo?version=1&type=xml&key=%s&domain=%s" % (self.__token, domain_name)
-        content = self.__get_content_xml(url_extend)
-        return DomainInfo(content)
+        parsed_content = self.__get_content_xml(url_extend)
+        check_error_code(self.__get_error_code(parsed_content))
+        return DomainInfo(parsed_content)
 
     def list_domains(self):
         """
@@ -55,13 +61,11 @@ class NameSilo:
         """
         domain_list = []
         url_extend = "listDomains?version=1&type=xml&key=%s" % self.__token
-        parsed_content = self.__get_content(url_extend)
-        for domain in parsed_content.getElementsByTagName("domain"):
-            domain_list.append(domain.childNodes[0].data)
+        parsed_content = self.__get_content_xml(url_extend)
+        check_error_code(self.__get_error_code(parsed_content))
+        return parsed_content['namesilo']['reply']['domains']['domain']
 
-        return domain_list
-
-    def register_domain(self, domain_name, years=1, auto_renew=0, private=0):
+    def register_domain(self, domain_name: str, years: int=1, auto_renew: int=0, private: int=0):
         """
 
         :param domain_name: name of domain
@@ -72,4 +76,24 @@ class NameSilo:
         """
         url_extend = "registerDomain?version=1&type=xml&key=%s&domain=%s&years=%s&private=%s&auto_renew=%s" % \
                      (self.__token, domain_name, years, private, auto_renew)
-        parsed_content = self.__get_content(url_extend)
+        parsed_content = self.__get_content_xml(url_extend)
+        check_error_code(self.__get_error_code(parsed_content))
+        return True
+
+    def renew_domain(self, domain_name: str, years: int=1):
+        """
+
+        :param domain_name:
+        :param years:
+        :return:
+        """
+        url_extend = "renewDomain?version=1&type=xml&key=%s&domain=%s&years=%s" % (self.__token, domain_name, years)
+        parsed_content = self.__get_content_xml(url_extend)
+        check_error_code(self.__get_error_code(parsed_content))
+        return True
+
+    def get_prices(self):
+        url_extend = "getPrices?version=1&type=xml&key=%s" % self.__token
+        parsed_content = self.__get_content_xml(url_extend)
+        check_error_code(self.__get_error_code(parsed_content))
+        return parsed_content['namesilo']['reply']
