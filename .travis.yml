@@ -4,6 +4,7 @@ python:
   - "3.5"
 
 before_install:
+  - python test.py
   - export PYTHONPATH=$HOME
   - echo $PYTHONPATH
 install: "pip install -r requirements.txt"
