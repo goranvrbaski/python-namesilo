@@ -1,7 +1,6 @@
 import os
 import requests
 import xmltodict
-from xml.dom import minidom
 from common.models import DomainInfo
 from common.error_codes import check_error_code
 
@@ -176,4 +175,17 @@ class NameSilo:
         parsed_contect = self.__process_data(url_extend)
         return True
 
+    def add_account_funds(self, amount: float, payment_id: int):
+        url_extend = "addAccountFunds?version=1&type=xml&key=%s&amount=%s&payment_id=%s" % (self.__token, amount,
+                                                                                            payment_id)
+        parsed_context = self.__get_content_xml(url_extend)
+        check_error_code(self.__get_error_code(parsed_context))
+        amount = parsed_context['namesilo']['reply']['new_balance'].replace(",", "")
+        return True, float(amount)
 
+    def get_account_balance(self):
+        url_extend = "getAccountBalance?version=1&type=xml&key=%s" % self.__token
+        parsed_context = self.__get_content_xml(url_extend)
+        check_error_code(self.__get_error_code(parsed_context))
+        amount = parsed_context['namesilo']['reply']['balance'].replace(",", "")
+        return float(amount)
