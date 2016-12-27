@@ -4,7 +4,7 @@ python:
   - "3.5"
 
 before_install:
-  - export PYTHONPATH=$HOME/builds/goranvrbaski/python-namesilo
+  - export PYTHONPATH=$HOME
   - echo $PYTHONPATH
 install: "pip install -r requirements.txt"
 script: python tests/namesilo.py
