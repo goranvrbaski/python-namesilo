@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to Python-Namesilo’s documentation! &#8212; Python-Namesilo 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-python-namesilo-s-documentation">
+<h1>Welcome to Python-Namesilo&#8217;s documentation!<a class="headerlink" href="#welcome-to-python-namesilo-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<dl class="class">
+<dt id="main.NameSilo">
+<em class="property">class </em><code class="descclassname">main.</code><code class="descname">NameSilo</code><span class="sig-paren">(</span><em>token: str</em>, <em>sandbox: bool = True</em><span class="sig-paren">)</span><a class="headerlink" href="#main.NameSilo" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="main.NameSilo.add_contact">
+<code class="descname">add_contact</code><span class="sig-paren">(</span><em>contact: main.ContactModel</em><span class="sig-paren">)</span><a class="headerlink" href="#main.NameSilo.add_contact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adding new contact for current account
+:param contact:
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.NameSilo.check_domain">
+<code class="descname">check_domain</code><span class="sig-paren">(</span><em>domain_name: str</em><span class="sig-paren">)</span><a class="headerlink" href="#main.NameSilo.check_domain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if domain name is available
+:param domain_name:
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.NameSilo.get_domain_info">
+<code class="descname">get_domain_info</code><span class="sig-paren">(</span><em>domain_name: str</em><span class="sig-paren">)</span><a class="headerlink" href="#main.NameSilo.get_domain_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns information about specified domain
+:param domain_name:
+:return: DomainInfo model from common.models</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.NameSilo.get_prices">
+<code class="descname">get_prices</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.NameSilo.get_prices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all supported tld prices
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.NameSilo.list_contacts">
+<code class="descname">list_contacts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.NameSilo.list_contacts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of all contacts for current account
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.NameSilo.list_domains">
+<code class="descname">list_domains</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.NameSilo.list_domains" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all domains registered with current account
+:return: list of registered domains</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.NameSilo.register_domain">
+<code class="descname">register_domain</code><span class="sig-paren">(</span><em>domain_name: str</em>, <em>years: int = 1</em>, <em>auto_renew: int = 0</em>, <em>private: int = 0</em><span class="sig-paren">)</span><a class="headerlink" href="#main.NameSilo.register_domain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register domain name
+:param domain_name: name of domain
+:param years:
+:param auto_renew:
+:param private:
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.NameSilo.renew_domain">
+<code class="descname">renew_domain</code><span class="sig-paren">(</span><em>domain_name: str</em>, <em>years: int = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#main.NameSilo.renew_domain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renew domain name
+:param domain_name:
+:param years:
+:return:</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to Python-Namesilo&#8217;s documentation!</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Goran Vrbaški.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
