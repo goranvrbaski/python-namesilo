@@ -41,7 +41,7 @@ error_codes_to_messages = {
     267: "Invalid domain name, or we do not support the provided extension/TLD.",
     280: "DNS modification error",
     300: "Successful API operation",
-    301: "Successful registration, but not all provided hosts were valid resulting in our nameservers being used",
+    301: "Successful registration, but not all provided hosts were valid resulting in our name servers being used",
     302: "Successful order, but there was an error with the contact information provided so your account default "
          "contact profile was used (you can configure your account to reject orders with invalid contact information "
          "via the Reseller Manager page in your account.)",
@@ -49,8 +49,10 @@ error_codes_to_messages = {
 }
 
 
-def check_error_code(error_code: int):
-    if error_code in [300, 301, 302]:
-        return error_codes_to_messages[error_code]
+def check_error_code(error_code: tuple):
+    if error_code[0] in [300, 301, 302]:
+        return error_codes_to_messages[error_code[0]]
+    elif error_code[0] in [210, 261, 264]:
+        raise Exception(error_code[1])
     else:
-        raise Exception(error_codes_to_messages[error_code])
+        raise Exception(error_codes_to_messages[error_code[0]])
