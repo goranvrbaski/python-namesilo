@@ -59,7 +59,7 @@ class NameSilo:
         return parsed_context
 
     def __get_error_code(self, data):
-        return int(data['namesilo']['reply']['code'])
+        return int(data['namesilo']['reply']['code']), data['namesilo']['reply']['detail']
 
     def __get_content_xml(self, url):
         api_request = requests.get(os.path.join(self.__base_url, url))
