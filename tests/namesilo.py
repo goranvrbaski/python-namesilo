@@ -2,7 +2,9 @@ import os
 import unittest
 from random import uniform
 from uuid import uuid4
-from main import NameSilo
+from main import NameSilo, ContactModel
+from common.models import DomainInfo
+from common.error_codes import check_error_code
 
 
 class NamesiloTestCase(unittest.TestCase):
@@ -32,6 +34,10 @@ class NamesiloTestCase(unittest.TestCase):
         domain_name = "test-%s.com" % uuid4()
         self.assertTrue(self.namesilo.register_domain(domain_name))
 
+    def test_domain_renewal(self):
+        domain_name = self.namesilo.list_domains()[0]
+        self.assertTrue(self.namesilo.renew_domain(domain_name))
+
     def test_domain_registration_fail(self):
         self.assertRaises(Exception, self.namesilo.register_domain)
 
@@ -41,6 +47,18 @@ class NamesiloTestCase(unittest.TestCase):
     def test_domain_price(self):
         self.assertIsInstance(self.namesilo.get_prices(), dict)
 
+    def test_check_error_code(self):
+        self.assertIsInstance(check_error_code((300, "")), str)
+
+    def test_get_domain_info(self):
+        self.assertIsInstance(self.namesilo.get_domain_info(self.namesilo.list_domains()[0]), DomainInfo)
+
+    def test_add_contact(self):
+        contact = ContactModel("First", "Last", "Address 15", "Some City", "Vojvodina", "RS", "test@nomail.com", "0038169999999", "21000")
+        self.assertTrue(self.namesilo.add_contact(contact))
 
 if __name__ == '__main__':
-    unittest.main()
+    try:
+        unittest.main()
+    except Exception as ex:
+        print(str(ex))
