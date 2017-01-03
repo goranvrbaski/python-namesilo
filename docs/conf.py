@@ -48,8 +48,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'Python-Namesilo'
-copyright = '2017, Goran Vrbaški'
-author = 'Goran Vrbaški'
+copyright = '2017, Goran Vrbaski'
+author = 'Goran Vrbaski'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
