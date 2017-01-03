@@ -46,7 +46,7 @@ This code is written in Python 3.5.x. If you want to contribute to this project 
 - [ ] configureEmailForward: Add or modify an email forward for your domain
 - [ ] deleteEmailForward: Delete an email forward for your domain
 - [ ] emailVerification Verify a Registrant email address
-- [ ] getAccountBalance: View your NameSilo account funds balance
-- [ ] addAccountFunds:* Increase your NameSilo account funds
+- [x] getAccountBalance: View your NameSilo account funds balance
+- [x] addAccountFunds: Increase your NameSilo account funds
 - [x] getPrices: Returns our price list customized optionally based upon your account's specific pricing
 
