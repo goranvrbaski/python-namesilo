@@ -9,6 +9,7 @@ from common.error_codes import check_error_code
 
 class NamesiloTestCase(unittest.TestCase):
     namesilo = NameSilo(os.environ['TOKEN'], sandbox=True)
+    print(os.environ['TOKEN'])
 
     def test_account_balance(self):
         balance = self.namesilo.get_account_balance()
