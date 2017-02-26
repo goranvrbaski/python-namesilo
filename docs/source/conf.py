@@ -20,6 +20,13 @@
 import os
 import sys
 
+on_rtd = os.environ.get('READTHEDOCS') == 'True'
+
+if on_rtd:
+    html_theme = 'default'
+else:
+    html_theme = 'nature'
+
 
 # -- General configuration ------------------------------------------------
 
@@ -79,13 +86,6 @@ pygments_style = 'sphinx'
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
 
-
-# -- Options for HTML output ----------------------------------------------
-
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
-html_theme = 'alabaster'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
