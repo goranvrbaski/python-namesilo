@@ -20,6 +20,8 @@
 import os
 import sys
 
+sys.path.insert(0, "/home/docs/checkouts/readthedocs.org/user_builds/python-namesilo/checkouts/develop/")
+
 on_rtd = os.environ.get('READTHEDOCS') == 'True'
 
 if on_rtd:
