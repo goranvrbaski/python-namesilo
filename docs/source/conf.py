@@ -19,7 +19,6 @@
 #
 import os
 import sys
-sys.path.insert(0, '/home/goran/projekti/python/python-namesilo/')
 
 
 # -- General configuration ------------------------------------------------
