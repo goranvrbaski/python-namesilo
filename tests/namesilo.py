@@ -31,11 +31,11 @@ class NamesiloTestCase(unittest.TestCase):
         self.assertFalse(self.namesilo.check_domain(registered_domains[0]))
 
     def test_domain_registration(self):
-        domain_name = "test-{}.com".format(uuid4())
+        domain_name = f"test-{uuid4()}.com"
         self.assertTrue(self.namesilo.register_domain(domain_name))
 
     def test_domain_renewal(self):
-        domain_name = self.namesilo.list_domains()[-5]
+        domain_name = self.namesilo.list_domains()[-30]
         self.assertTrue(self.namesilo.renew_domain(domain_name))
 
     def test_domain_registration_fail(self):
@@ -51,7 +51,9 @@ class NamesiloTestCase(unittest.TestCase):
         self.assertIsInstance(check_error_code((300, "")), str)
 
     def test_get_domain_info(self):
-        self.assertIsInstance(self.namesilo.get_domain_info(self.namesilo.list_domains()[0]), DomainInfo)
+        self.assertIsInstance(self.namesilo.get_domain_info(
+            self.namesilo.list_domains()[0]), DomainInfo
+        )
 
     def test_add_contact(self):
         contact = ContactModel("First", "Last", "Address 15", "Some City", "Vojvodina", "RS", "test@nomail.com", "0038169999999", "21000")
