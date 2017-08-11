@@ -1,8 +1,18 @@
 language: python
+
+branches:
+  only:
+    - master
+    - develop
+    - /^pr\..*/
+
 python:
   - "3.5"
+  - "3.6"
 
 before_install:
   - export PYTHONPATH=$HOME/build/goranvrbaski/python-namesilo
+
 install: "pip install -r requirements.txt"
-script: python tests/namesilo.py
+
+script: python -m unittest tests/namesilo.py --verbose
