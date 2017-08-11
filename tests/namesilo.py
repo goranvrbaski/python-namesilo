@@ -1,7 +1,8 @@
 import os
 import unittest
-from random import uniform
+
 from uuid import uuid4
+
 from main import NameSilo, ContactModel
 from common.models import DomainInfo
 from common.error_codes import check_error_code
@@ -9,7 +10,6 @@ from common.error_codes import check_error_code
 
 class NamesiloTestCase(unittest.TestCase):
     namesilo = NameSilo(os.environ['TOKEN'], sandbox=True)
-    print(os.environ['TOKEN'])
 
     def test_account_balance(self):
         balance = self.namesilo.get_account_balance()
@@ -17,26 +17,25 @@ class NamesiloTestCase(unittest.TestCase):
         self.assertGreaterEqual(balance, 0)
 
     def test_add_funds(self):
-        starting_balance = self.namesilo.get_account_balance()
-        random_amount = round(uniform(0, 50), 2)
-        expected_amount = round(starting_balance + random_amount, 2)
-        status, balance = self.namesilo.add_account_funds(random_amount, 281)
-        self.assertEqual(expected_amount, balance)
+        balance = self.namesilo.get_account_balance()
+        expected_balance = round(balance + 5, 2)
+        status, balance = self.namesilo.add_account_funds(5, 281)
+        self.assertEqual(expected_balance, balance)
 
     def test_domain_check_available(self):
-        domain_name = "%s.com" % uuid4()
+        domain_name = "{}.com".format(uuid4())
         self.assertTrue(self.namesilo.check_domain(domain_name))
 
-    def test_domain_check_not_availabe(self):
+    def test_domain_check_not_available(self):
         registered_domains = self.namesilo.list_domains()
         self.assertFalse(self.namesilo.check_domain(registered_domains[0]))
 
     def test_domain_registration(self):
-        domain_name = "test-%s.com" % uuid4()
+        domain_name = "test-{}.com".format(uuid4())
         self.assertTrue(self.namesilo.register_domain(domain_name))
 
     def test_domain_renewal(self):
-        domain_name = self.namesilo.list_domains()[0]
+        domain_name = self.namesilo.list_domains()[6]
         self.assertTrue(self.namesilo.renew_domain(domain_name))
 
     def test_domain_registration_fail(self):
