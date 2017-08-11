@@ -49,7 +49,7 @@ class NameSilo:
         :param token: access token from namesilo.com
         :param sandbox: true or false
         """
-        self.__token = token
+        self._token = token
         if sandbox:
             self.__base_url = "http://sandbox.namesilo.com/api/"
         else:
@@ -67,7 +67,9 @@ class NameSilo:
     def _get_content_xml(self, url):
         api_request = requests.get(os.path.join(self.__base_url, url))
         if api_request.status_code != 200:
-            raise Exception("API responded with status code: %s" % api_request.status_code)
+            raise Exception(
+                f"API responded with status code: {api_request.status_code}"
+            )
 
         content = xmltodict.parse(api_request.content.decode())
         return content
@@ -78,7 +80,8 @@ class NameSilo:
         :param domain_name:
         :return:
         """
-        url_extend = "checkRegisterAvailability?version=1&type=xml&key=%s&domains=%s" % (self.__token, domain_name)
+        url_extend = f"checkRegisterAvailability?version=1&type=xml&" \
+                     f"key={self._token}&domains={domain_name}"
         parsed_content = self._get_content_xml(url_extend)
         check_error_code(self._get_error_code(parsed_content))
         if 'available' in parsed_content['namesilo']['reply'].keys():
@@ -92,7 +95,8 @@ class NameSilo:
         :param domain_name:
         :return: DomainInfo model from common.models
         """
-        url_extend = "getDomainInfo?version=1&type=xml&key=%s&domain=%s" % (self.__token, domain_name)
+        url_extend = f"getDomainInfo?version=1&type=xml&key={self._token}&" \
+                     f"domain={domain_name}"
         parsed_content = self._get_content_xml(url_extend)
         check_error_code(self._get_error_code(parsed_content))
         return DomainInfo(parsed_content)
@@ -102,8 +106,7 @@ class NameSilo:
         List all domains registered with current account
         :return: list of registered domains
         """
-        domain_list = []
-        url_extend = "listDomains?version=1&type=xml&key=%s" % self.__token
+        url_extend = f"listDomains?version=1&type=xml&key={self._token}"
         parsed_content = self._get_content_xml(url_extend)
         check_error_code(self._get_error_code(parsed_content))
         return parsed_content['namesilo']['reply']['domains']['domain']
@@ -117,8 +120,9 @@ class NameSilo:
         :param private:
         :return:
         """
-        url_extend = "registerDomain?version=1&type=xml&key=%s&domain=%s&years=%s&private=%s&auto_renew=%s" % \
-                     (self.__token, domain_name, years, private, auto_renew)
+        url_extend = f"registerDomain?version=1&type=xml&key={self._token}&" \
+                     f"domain={domain_name}&years={years}&private={private}&" \
+                     f"auto_renew={auto_renew}"
         parsed_content = self._get_content_xml(url_extend)
         check_error_code(self._get_error_code(parsed_content))
         return True
@@ -130,7 +134,8 @@ class NameSilo:
         :param years:
         :return:
         """
-        url_extend = "renewDomain?version=1&type=xml&key=%s&domain=%s&years=%s" % (self.__token, domain_name, years)
+        url_extend = f"renewDomain?version=1&type=xml&key={self._token}&" \
+                     f"domain={domain_name}&years={years}"
         parsed_content = self._get_content_xml(url_extend)
         check_error_code(self._get_error_code(parsed_content))
         return True
@@ -140,7 +145,7 @@ class NameSilo:
         Returns all supported tld prices
         :return:
         """
-        url_extend = "getPrices?version=1&type=xml&key=%s" % self.__token
+        url_extend = f"getPrices?version=1&type=xml&key={self._token}"
         parsed_content = self._get_content_xml(url_extend)
         check_error_code(self._get_error_code(parsed_content))
         return parsed_content['namesilo']['reply']
@@ -151,7 +156,7 @@ class NameSilo:
         :return:
         """
         contacts = []
-        url_extend = "contactList?version=1&type=xml&key=%s" % self.__token
+        url_extend = f"contactList?version=1&type=xml&key={self._token}"
         parsed_context = self._get_content_xml(url_extend)
         check_error_code(self._get_error_code(parsed_context))
         for contact in parsed_context['namesilo']['reply']['contact']:
@@ -164,30 +169,32 @@ class NameSilo:
         :param contact:
         :return:
         """
-        url_extend = "contactAdd?version=1&type=xml&key={0}&fn={1}&ln={2}&ad={3}&cy={4}&st={5}&zp={6}&ct={7}&em={8}" \
-                     "&ph={9}".format(self.__token, contact.first_name, contact.last_name, contact.address,
-                                      contact.city, contact.state, contact.zip, contact.country, contact.email,
-                                      contact.phone)
+        url_extend = f"contactAdd?version=1&type=xml&key={self._token}&" \
+                     f"fn={contact.first_name}&ln={contact.last_name}&" \
+                     f"ad={contact.address}&cy={contact.city}&" \
+                     f"st={contact.state}&zp={contact.zip}&" \
+                     f"ct={contact.country}&em={contact.email}&" \
+                     f"ph={contact.phone}"
         parsed_context = self._get_content_xml(url_extend)
         check_error_code(self._get_error_code(parsed_context))
         return True
 
     # TODO: need to finish update contact
     def update_contact(self, contact: ContactModel):
-        url_extend = "contactUpdate?version=1&type=xml&key={0}&contact_id=1440&fn=Goran&ln=Vrbaski&ad=123%20N.%201st%20Street&cy=Anywhere&st=AZ&zp=55555&ct=US&em=test@test.com&ph=4805555555".format(self.__token)
+        url_extend = f"contactUpdate?version=1&type=xml&key={self._token}&contact_id=1440&fn=Goran&ln=Vrbaski&ad=123%20N.%201st%20Street&cy=Anywhere&st=AZ&zp=55555&ct=US&em=test@test.com&ph=4805555555"
         parsed_contect = self._process_data(url_extend)
         return True
 
     def add_account_funds(self, amount: float, payment_id: int):
-        url_extend = "addAccountFunds?version=1&type=xml&key=%s&amount=%s&payment_id=%s" % (self.__token, amount,
-                                                                                            payment_id)
+        url_extend = f"addAccountFunds?version=1&type=xml&key={self._token}&" \
+                     f"amount={amount}&payment_id={payment_id}"
         parsed_context = self._get_content_xml(url_extend)
         check_error_code(self._get_error_code(parsed_context))
         amount = parsed_context['namesilo']['reply']['new_balance'].replace(",", "")
         return True, float(amount)
 
     def get_account_balance(self):
-        url_extend = "getAccountBalance?version=1&type=xml&key=%s" % self.__token
+        url_extend = f"getAccountBalance?version=1&type=xml&key={self._token}"
         parsed_context = self._get_content_xml(url_extend)
         check_error_code(self._get_error_code(parsed_context))
         amount = parsed_context['namesilo']['reply']['balance'].replace(",", "")
