@@ -1,7 +1,7 @@
 # python-namesilo
 [![Build Status](https://travis-ci.org/goranvrbaski/python-namesilo.svg?branch=develop)](https://travis-ci.org/goranvrbaski/python-namesilo)
 
-This code is written in Python 3.5.x. If you want to contribute to this project feel free to contact me at any time.
+This code is written in Python 3.6.x. If you want to contribute to this project feel free to contact me at any time.
 
 ### Goals for implementation
 
