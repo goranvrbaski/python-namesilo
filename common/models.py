@@ -22,6 +22,7 @@ class NameServers:
             ns_list.append(name_server['#text'])
         return ns_list
 
+
 class Contact:
     def __init__(self, data):
         self.administrative = data['administrative']
