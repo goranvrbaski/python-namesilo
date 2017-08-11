@@ -36,7 +36,7 @@ class NamesiloTestCase(unittest.TestCase):
         self.assertTrue(self.namesilo.register_domain(domain_name))
 
     def test_domain_renewal(self):
-        domain_name = self.namesilo.list_domains()[0]
+        domain_name = self.namesilo.list_domains()[-1]
         self.assertTrue(self.namesilo.renew_domain(domain_name))
 
     def test_domain_registration_fail(self):
