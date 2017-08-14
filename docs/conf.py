@@ -21,9 +21,9 @@ import os
 import sys
 
 on_rtd = os.environ.get('READTHEDOCS') == 'True'
+sys.path.insert(0, os.path.abspath('..'))
 
 if on_rtd:
-    sys.path.append("/home/docs/checkouts/readthedocs.org/user_builds/python-namesilo/checkouts/develop/")
     html_theme = 'default'
 else:
     html_theme = 'nature'
