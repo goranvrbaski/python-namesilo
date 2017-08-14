@@ -9,42 +9,45 @@ __author__ = 'goran.vrbaski'
 
 
 class ContactModel:
-    def __init__(self, first_name: str, last_name: str, address: str, city: str, state: str, country: str, email: str, phone: str, zip: str):
+    def __init__(self, first_name, last_name, address, city, state, country, email, phone, zip):
         """
         Model for manipulating NameSilo contacts
-        :param first_name: First Name
-        :param last_name: Last Name
-        :param address: Address
-        :param city: City
-        :param state: State
-        :param country: Country
-        :param email: Email address
-        :param phone: Telephone number
-        :param zip: ZIP Code
+
+        :param str first_name: First Name
+        :param str last_name: Last Name
+        :param str address: Address
+        :param str city: City
+        :param str state: State
+        :param str country: Country
+        :param str email: Email address
+        :param str phone: Telephone number
+        :param str zip: ZIP Code
         """
-        self.first_name = self.__correct_formating(first_name)
-        self.last_name = self.__correct_formating(last_name)
-        self.address = self.__correct_formating(address)
-        self.city = self.__correct_formating(city)
-        self.state = self.__correct_formating(state)
-        self.country = self.__correct_formating(country)
-        self.email = self.__correct_formating(email)
-        self.phone = self.__correct_formating(phone)
-        self.zip = self.__correct_formating(zip)
+        self.first_name = self._correct_formating(first_name)
+        self.last_name = self._correct_formating(last_name)
+        self.address = self._correct_formating(address)
+        self.city = self._correct_formating(city)
+        self.state = self._correct_formating(state)
+        self.country = self._correct_formating(country)
+        self.email = self._correct_formating(email)
+        self.phone = self._correct_formating(phone)
+        self.zip = self._correct_formating(zip)
 
     @staticmethod
-    def __correct_formating(data: str):
+    def _correct_formating(data: str):
         """
         Replacing all whitespaces with %20 (NameSilo requirement)
         :param data:
-        :return:
+
+        :return: string
         """
         return data.replace(" ", "%20")
 
 
 class NameSilo:
-    def __init__(self, token: str, sandbox: bool=True):
+    def __init__(self, token, sandbox: True):
         """
+        Creating Namesilo object with given token
 
         :param token: access token from namesilo.com
         :param sandbox: true or false
@@ -74,11 +77,13 @@ class NameSilo:
         content = xmltodict.parse(api_request.content.decode())
         return content
 
-    def check_domain(self, domain_name: str):
+    def check_domain(self, domain_name):
         """
         Check if domain name is available
-        :param domain_name:
-        :return:
+
+        :param str domain_name: Domain name for checking
+        :return: Availability of domain
+        :rtype: bool
         """
         url_extend = f"checkRegisterAvailability?version=1&type=xml&" \
                      f"key={self._token}&domains={domain_name}"
@@ -89,11 +94,13 @@ class NameSilo:
         else:
             return False
 
-    def get_domain_info(self, domain_name: str):
+    def get_domain_info(self, domain_name):
         """
         Returns information about specified domain
-        :param domain_name:
-        :return: DomainInfo model from common.models
+
+        :param str domain_name: name of domain
+        :return: domain information
+        :rtype: DomainInfo
         """
         url_extend = f"getDomainInfo?version=1&type=xml&key={self._token}&" \
                      f"domain={domain_name}"
@@ -104,21 +111,25 @@ class NameSilo:
     def list_domains(self):
         """
         List all domains registered with current account
+
         :return: list of registered domains
+        :rtype: list
         """
         url_extend = f"listDomains?version=1&type=xml&key={self._token}"
         parsed_content = self._get_content_xml(url_extend)
         check_error_code(self._get_error_code(parsed_content))
         return parsed_content['namesilo']['reply']['domains']['domain']
 
-    def register_domain(self, domain_name: str, years: int=1, auto_renew: int=0, private: int=0):
+    def register_domain(self, domain_name, years=1, auto_renew=0, private=0):
         """
-        Register domain name
-        :param domain_name: name of domain
-        :param years:
-        :param auto_renew:
-        :param private:
-        :return:
+        Register a new domain name
+
+        :param str domain_name: name of domain
+        :param int years: how long to register domain
+        :param int auto_renew: turn on or off auto-renewal option
+        :param int private: hide your private information (WHOIS)
+        :return: status of domain registration
+        :rtype: bool
         """
         url_extend = f"registerDomain?version=1&type=xml&key={self._token}&" \
                      f"domain={domain_name}&years={years}&private={private}&" \
@@ -127,12 +138,14 @@ class NameSilo:
         check_error_code(self._get_error_code(parsed_content))
         return True
 
-    def renew_domain(self, domain_name: str, years: int=1):
+    def renew_domain(self, domain_name, years=1):
         """
         Renew domain name
-        :param domain_name:
-        :param years:
-        :return:
+
+        :param str domain_name: domain name for renewal
+        :param int years:
+        :return: status of renewal
+        :rtype: bool
         """
         url_extend = f"renewDomain?version=1&type=xml&key={self._token}&" \
                      f"domain={domain_name}&years={years}"
@@ -142,8 +155,10 @@ class NameSilo:
 
     def get_prices(self):
         """
-        Returns all supported tld prices
-        :return:
+        Returns all prices for supported TLDs
+
+        :return: Prices for supported TLDs
+        :rtype: dict
         """
         url_extend = f"getPrices?version=1&type=xml&key={self._token}"
         parsed_content = self._get_content_xml(url_extend)
@@ -153,7 +168,9 @@ class NameSilo:
     def list_contacts(self):
         """
         Returns list of all contacts for current account
-        :return:
+
+        :return: list of all contacts
+        :rtype: list
         """
         contacts = []
         url_extend = f"contactList?version=1&type=xml&key={self._token}"
@@ -163,11 +180,13 @@ class NameSilo:
             contacts.append(contact)
         return contacts
 
-    def add_contact(self, contact: ContactModel):
+    def add_contact(self, contact):
         """
         Adding new contact for current account
-        :param contact:
-        :return:
+
+        :param ContactModel contact:
+        :return: Status for adding contact
+        :rtype: bool
         """
         url_extend = f"contactAdd?version=1&type=xml&key={self._token}&" \
                      f"fn={contact.first_name}&ln={contact.last_name}&" \
@@ -185,7 +204,15 @@ class NameSilo:
         parsed_contect = self._process_data(url_extend)
         return True
 
-    def add_account_funds(self, amount: float, payment_id: int):
+    def add_account_funds(self, amount, payment_id):
+        """
+        Adding funds to Namesilo account
+
+        :param float amount: amount to add
+        :param int payment_id: ID of payment (credit card)
+        :return: Status and amount after adding funds, example: *(True, 150.00)*
+        :rtype: tuple
+        """
         url_extend = f"addAccountFunds?version=1&type=xml&key={self._token}&" \
                      f"amount={amount}&payment_id={payment_id}"
         parsed_context = self._get_content_xml(url_extend)
@@ -194,6 +221,12 @@ class NameSilo:
         return True, float(amount)
 
     def get_account_balance(self):
+        """
+        Returns current account balance
+
+        :return: current account balance
+        :rtype: float
+        """
         url_extend = f"getAccountBalance?version=1&type=xml&key={self._token}"
         parsed_context = self._get_content_xml(url_extend)
         check_error_code(self._get_error_code(parsed_context))
