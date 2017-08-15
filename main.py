@@ -9,7 +9,7 @@ __author__ = 'goran.vrbaski'
 
 
 class ContactModel:
-    def __init__(self, first_name, last_name, address, city, state, country, email, phone, zip):
+    def __init__(self, **kwargs):
         """
         Model for manipulating NameSilo contacts
 
@@ -23,15 +23,15 @@ class ContactModel:
         :param str phone: Telephone number
         :param str zip: ZIP Code
         """
-        self.first_name = self._correct_formating(first_name)
-        self.last_name = self._correct_formating(last_name)
-        self.address = self._correct_formating(address)
-        self.city = self._correct_formating(city)
-        self.state = self._correct_formating(state)
-        self.country = self._correct_formating(country)
-        self.email = self._correct_formating(email)
-        self.phone = self._correct_formating(phone)
-        self.zip = self._correct_formating(zip)
+        self.first_name = self._correct_formating(kwargs.get('first_name'))
+        self.last_name = self._correct_formating(kwargs.get('last_name'))
+        self.address = self._correct_formating(kwargs.get('address'))
+        self.city = self._correct_formating(kwargs.get('city'))
+        self.state = self._correct_formating(kwargs.get('state'))
+        self.country = self._correct_formating(kwargs.get('country'))
+        self.email = self._correct_formating(kwargs.get('email'))
+        self.phone = self._correct_formating(kwargs.get('phone'))
+        self.zip = self._correct_formating(kwargs.get('zip'))
 
     @staticmethod
     def _correct_formating(data: str):
@@ -65,7 +65,8 @@ class NameSilo:
 
     @staticmethod
     def _get_error_code(data):
-        return int(data['namesilo']['reply']['code']), data['namesilo']['reply']['detail']
+        return int(data['namesilo']['reply']['code']), \
+               data['namesilo']['reply']['detail']
 
     def _get_content_xml(self, url):
         api_request = requests.get(os.path.join(self.__base_url, url))
