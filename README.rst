@@ -59,5 +59,5 @@ Goals for implementation
 .. |CodeCov| image:: https://codecov.io/gh/goranvrbaski/python-namesilo/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/goranvrbaski/python-namesilo
 
-.. |PyPiVersion|| image:: https://badge.fury.io/py/python-namesilo.svg
+.. |PyPiVersion| image:: https://badge.fury.io/py/python-namesilo.svg
    :target: https://badge.fury.io/py/python-namesilo
