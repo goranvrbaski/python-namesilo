@@ -1,7 +1,7 @@
 python-namesilo
 ===============
 
-|Build Status| |CodeCov|
+|Build Status| |CodeCov| |PyPiVersion|
 
 version: 0.1.6
 
@@ -12,19 +12,14 @@ Goals for implementation
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  [x] registerDomain:\* Register a new domain name
--  [ ] registerDomainDrop:\* Register a new domain name using
-   drop-catching
+-  [ ] registerDomainDrop:\* Register a new domain name using drop-catching
 -  [x] renewDomain:\* Renew a domain name
--  [ ] transferDomain:\* Transfer a domain name into your NameSilo
-   account
+-  [ ] transferDomain:\* Transfer a domain name into your NameSilo account
 -  [ ] checkTransferStatus: Check the status of a domain transfer
--  [x] checkRegisterAvailability: Determine if up to 200 domains can be
-   regsitered at this time
--  [ ] checkTransferAvailability: Determine if up to 200 domains can be
-   transferred into your account at this time
+-  [x] checkRegisterAvailability: Determine if up to 200 domains can be registered at this time
+-  [ ] checkTransferAvailability: Determine if up to 200 domains can be transferred into your account at this time
 -  [x] listDomains: A list of all active domains within your account
--  [x] getDomainInfo: Get essential information on a domain within your
-   account
+-  [x] getDomainInfo: Get essential information on a domain within your account
 -  [x] contactList: View all contact profiles in your account
 -  [x] contactAdd: Add a contact profile to your account
 -  [x] contactUpdate: Update a contact profile in account
@@ -39,27 +34,22 @@ Goals for implementation
 -  [ ] portfolioAdd: Add a portfolio to your account
 -  [ ] portfolioDelete: Delete a portfolio from your account
 -  [ ] portfolioDomainAssociate: Add up to 200 domains to a portfolio
--  [ ] listRegisteredNameServers: List the Registered NameServers
-   associated with one of your domains
--  [ ] addRegisteredNameServer: Add a Registered NameServer for one of
-   your domains
+-  [ ] listRegisteredNameServers: List the Registered NameServers associated with one of your domains
+-  [ ] addRegisteredNameServer: Add a Registered NameServer for one of your domains
 -  [ ] modifyRegisteredNameServer: Modify a Registered NameServer
 -  [ ] deleteRegisteredNameServer: Delete a Registered NameServer
 -  [ ] addPrivacy: Add WHOIS Privacy to a domain
 -  [ ] removePrivacy: Remove WHOIS Privacy from a domain
 -  [ ] addAutoRenewal: Set your domain to be auto-renewed
--  [ ] removeAutoRenewal: Remove the auto-renewal setting from your
-   domain
--  [ ] retrieveAuthCode: Have the EPP authorization code for the domain
-   emailed to the administrative contact
+-  [ ] removeAutoRenewal: Remove the auto-renewal setting from your domain
+-  [ ] retrieveAuthCode: Have the EPP authorization code for the domain emailed to the administrative contact
 -  [ ] domainForward: Forward your domain
 -  [ ] domainForwardSubDomain: Forward a sub-domain
 -  [ ] domainForwardSubDomainDelete: Delete a sub-domain forward
 -  [x] domainLock: Lock your domain
 -  [x] domainUnlock: Unlock your domain
 -  [ ] listEmailForwards: List all email forwards for your domain
--  [ ] configureEmailForward: Add or modify an email forward for your
-   domain
+-  [ ] configureEmailForward: Add or modify an email forward for your domain
 -  [ ] deleteEmailForward: Delete an email forward for your domain
 -  [ ] emailVerification Verify a Registrant email address
 
@@ -68,3 +58,6 @@ Goals for implementation
 
 .. |CodeCov| image:: https://codecov.io/gh/goranvrbaski/python-namesilo/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/goranvrbaski/python-namesilo
+
+.. |PyPiVersion| image:: https://badge.fury.io/py/python-namesilo.svg
+   :target: https://badge.fury.io/py/python-namesilo
