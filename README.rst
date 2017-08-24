@@ -55,8 +55,8 @@ Goals for implementation
 -  [ ] domainForward: Forward your domain
 -  [ ] domainForwardSubDomain: Forward a sub-domain
 -  [ ] domainForwardSubDomainDelete: Delete a sub-domain forward
--  [ ] domainLock: Lock your domain
--  [ ] domainUnlock: Unlock your domain
+-  [x] domainLock: Lock your domain
+-  [x] domainUnlock: Unlock your domain
 -  [ ] listEmailForwards: List all email forwards for your domain
 -  [ ] configureEmailForward: Add or modify an email forward for your
    domain
