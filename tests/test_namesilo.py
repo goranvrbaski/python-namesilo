@@ -156,6 +156,9 @@ class NSTestCase(unittest.TestCase):
     def test_check_error_code(self):
         self.assertIsInstance(check_error_code((300, "")), str)
 
+    def test_check_error_code_exception(self):
+        self.assertRaises(Exception, check_error_code, (400, ""))
+
     @mock.patch('namesilo.NameSilo._get_content_xml')
     def test_get_domain_info(self, mock_content_xml):
         mock_content_xml.return_value = mocked_data
@@ -182,8 +185,7 @@ class NSTestCase(unittest.TestCase):
         domain_name = "some-domain.com"
         mocked_data['namesilo']['reply']['code'] = 261
         mock_content_xml.return_value = mocked_data
-        self.assertRaises(Exception, self.ns.register_domain,
-                          domain_name)
+        self.assertRaises(Exception, self.ns.register_domain, domain_name)
         mock_content_xml.assert_called_once()
 
 if __name__ == '__main__':
