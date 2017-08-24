@@ -2,7 +2,7 @@ import unittest
 
 from unittest import mock
 
-from main import NameSilo
+from main import NameSilo, ContactModel
 from common.models import DomainInfo
 from common.error_codes import check_error_code
 from tests.mocked_data import mocked_data, mocked_single_contact
@@ -108,10 +108,22 @@ class NamesiloTestCase(unittest.TestCase):
         self.assertIsInstance(self.namesilo.list_contacts(), list)
         mock_content_xml.assert_called_once()
 
+    @mock.patch('main.NameSilo._get_content_xml')
+    def test_add_contact(self, mock_content_xml):
+        mock_content_xml.return_value = mocked_single_contact
+        self.assertTrue(self.namesilo.add_contact(ContactModel(
+            **mocked_single_contact['namesilo']['reply']['contact'])
+        ))
+        mock_content_xml.assert_called_once_with(
+            'contactAdd?version=1&type=xml&key=name-silo-token&fn=First&'
+            'ln=Last&ad=Fake%20Address%2018&cy=Zrenjanin&st=Vojvodina&'
+            'zp=23000&ct=RS&em=some.email@some.domain.com&ph=003816050005000'
+        )
+
     @mock.patch('main.NameSilo._process_data')
     def test_delete_contact(self, mock_process):
         mock_process.return_value = dict()
-        self.namesilo.delete_contact("500")
+        self.namesilo.delete_contact(500)
         mock_process.assert_called_once_with(
             "contactDelete?version=1&type=xml&"
             "key=name-silo-token&contact_id=500"
