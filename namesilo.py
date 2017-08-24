@@ -40,6 +40,13 @@ class ContactModel:
 
     @staticmethod
     def convert_contact_model(reply):
+        """
+        Convert standard Namesilo reply to ContactModel
+
+        :param reply: Namesilo Contact response
+        :return: Populated ContactModel from Namesilo
+        :rtype: ContactModel
+        """
         return ContactModel(
             contact_id=reply['contact_id'],
             first_name=reply['first_name'],
@@ -65,7 +72,7 @@ class ContactModel:
 
 
 class NameSilo:
-    def __init__(self, token, sandbox: True):
+    def __init__(self, token, sandbox: bool=True):
         """
         Creating Namesilo object with given token
 
@@ -112,8 +119,8 @@ class NameSilo:
         check_error_code(self._get_error_code(parsed_content))
         if 'available' in parsed_content['namesilo']['reply'].keys():
             return True
-        else:
-            return False
+
+        return False
 
     def get_domain_info(self, domain_name):
         """
@@ -129,10 +136,19 @@ class NameSilo:
         check_error_code(self._get_error_code(parsed_content))
         return DomainInfo(parsed_content)
 
-    def change_domain_nameservers(self, domain, prim_ns, sec_ns):
+    def change_domain_nameservers(self, domain, primary_ns, secondary_ns):
+        """
+        Change name server for specified domain
+
+        :param str domain: Domain name
+        :param str primary_ns: Primary name Server
+        :param str secondary_ns: Secondary name server
+        :return: Status of action
+        :rtype: bool
+        """
         url_extend = f"changeNameServers?version=1&" \
                      f"type=xml&key={self._token}&domain={domain}&" \
-                     f"ns1={prim_ns}&ns2={sec_ns}"
+                     f"ns1={primary_ns}&ns2={secondary_ns}"
         parsed_content = self._get_content_xml(url_extend)
         check_error_code(self._get_error_code(parsed_content))
         return True
@@ -178,6 +194,30 @@ class NameSilo:
         """
         url_extend = f"renewDomain?version=1&type=xml&key={self._token}&" \
                      f"domain={domain_name}&years={years}"
+        parsed_content = self._get_content_xml(url_extend)
+        check_error_code(self._get_error_code(parsed_content))
+        return True
+
+    def lock_domain(self, domain_name: str):
+        """
+
+        :param str domain_name:
+        :return:
+        """
+        url_extend = f"domainLock?version=1&type=xml&key={self._token}&" \
+                     f"domain={domain_name}"
+        parsed_content = self._get_content_xml(url_extend)
+        check_error_code(self._get_error_code(parsed_content))
+        return True
+
+    def unlock_domain(self, domain_name: str):
+        """
+
+        :param str domain_name:
+        :return:
+        """
+        url_extend = f"domainUnlock?version=1&type=xml&key={self._token}&" \
+                     f"domain={domain_name}"
         parsed_content = self._get_content_xml(url_extend)
         check_error_code(self._get_error_code(parsed_content))
         return True
