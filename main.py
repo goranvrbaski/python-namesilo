@@ -129,6 +129,14 @@ class NameSilo:
         check_error_code(self._get_error_code(parsed_content))
         return DomainInfo(parsed_content)
 
+    def change_domain_nameservers(self, domain, prim_ns, sec_ns):
+        url_extend = f"changeNameServers?version=1&" \
+                     f"type=xml&key={self._token}&domain={domain}&" \
+                     f"ns1={prim_ns}&ns2={sec_ns}"
+        parsed_content = self._get_content_xml(url_extend)
+        check_error_code(self._get_error_code(parsed_content))
+        return True
+
     def list_domains(self):
         """
         List all domains registered with current account
@@ -264,15 +272,15 @@ class NameSilo:
 
         :param float amount: amount to add
         :param int payment_id: ID of payment (credit card)
-        :return: Status and amount after adding funds, example: *(True, 150.00)*
+        :return: Status and amount after adding funds, example: (True, 150.00)
         :rtype: tuple
         """
         url_extend = f"addAccountFunds?version=1&type=xml&key={self._token}&" \
                      f"amount={amount}&payment_id={payment_id}"
         parsed_context = self._get_content_xml(url_extend)
         check_error_code(self._get_error_code(parsed_context))
-        amount = parsed_context['namesilo']['reply']['new_balance'].replace(",", "")
-        return True, float(amount)
+        amount = parsed_context['namesilo']['reply']['new_balance']
+        return True, float(amount.replace(",", ""))
 
     def get_account_balance(self):
         """
@@ -284,5 +292,5 @@ class NameSilo:
         url_extend = f"getAccountBalance?version=1&type=xml&key={self._token}"
         parsed_context = self._get_content_xml(url_extend)
         check_error_code(self._get_error_code(parsed_context))
-        amount = parsed_context['namesilo']['reply']['balance'].replace(",", "")
-        return float(amount)
+        amount = parsed_context['namesilo']['reply']['balance']
+        return float(amount.replace(",", ""))
