@@ -1,3 +1,24 @@
+mocked_single_contact = dict(
+    namesilo=dict(
+        reply=dict(
+            contact=dict(
+                first_name="First",
+                last_name="Last",
+                email="some.email@some.domain.com",
+                phone="003816050005000",
+                address="Fake Address 18",
+                city="Zrenjanin",
+                state="Vojvodina",
+                country="RS",
+                zip="23000",
+                contact_id="500"
+            ),
+            code=300,
+            detail=""
+            )
+        )
+    )
+
 mocked_data = {
     'namesilo': {
         'reply': {
@@ -6,7 +27,20 @@ mocked_data = {
             'balance': '500',
             'new_balance': "505",
             'available': [],
-            'contact': ['some-contact', 'some-other-contact'],
+            'contact': [
+                dict(
+                    first_name="First",
+                    last_name="Last",
+                    email="some.email@some.domain.com",
+                    phone="003816050005000",
+                    address="Fake Address 18",
+                    city="Zrenjanin",
+                    state="Vojvodina",
+                    country="RS",
+                    zip="23000",
+                    contact_id="500"
+                )
+            ],
             'auto_renew': True,
             'created': '',
             'expires': '',
@@ -39,3 +73,4 @@ mocked_data = {
         }
     }
 }
+
