@@ -5,7 +5,7 @@ from unittest import mock
 from main import NameSilo
 from common.models import DomainInfo
 from common.error_codes import check_error_code
-from tests.mocked_data import mocked_data
+from tests.mocked_data import mocked_data, mocked_single_contact
 
 
 class NamesiloTestCase(unittest.TestCase):
@@ -101,6 +101,21 @@ class NamesiloTestCase(unittest.TestCase):
         mock_content_xml.return_value = mocked_data
         self.assertIsInstance(self.namesilo.list_contacts(), list)
         mock_content_xml.assert_called_once()
+
+    @mock.patch('main.NameSilo._get_content_xml')
+    def test_contacts_lists_only_one_contact(self, mock_content_xml):
+        mock_content_xml.return_value = mocked_single_contact
+        self.assertIsInstance(self.namesilo.list_contacts(), list)
+        mock_content_xml.assert_called_once()
+
+    @mock.patch('main.NameSilo._process_data')
+    def test_delete_contact(self, mock_process):
+        mock_process.return_value = dict()
+        self.namesilo.delete_contact("500")
+        mock_process.assert_called_once_with(
+            "contactDelete?version=1&type=xml&"
+            "key=name-silo-token&contact_id=500"
+        )
 
     @mock.patch('main.NameSilo._get_content_xml')
     def test_domain_price(self, mock_content_xml):
