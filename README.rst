@@ -1,7 +1,7 @@
 python-namesilo
 ===============
 
-|Build Status|
+|Build Status| |CodeCov|
 
 version: 0.1.5.1
 
@@ -65,3 +65,6 @@ Goals for implementation
 
 .. |Build Status| image:: https://travis-ci.org/goranvrbaski/python-namesilo.svg?branch=master
    :target: https://travis-ci.org/goranvrbaski/python-namesilo
+
+.. |CodeCov| image:: https://codecov.io/gh/goranvrbaski/python-namesilo/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/goranvrbaski/python-namesilo
