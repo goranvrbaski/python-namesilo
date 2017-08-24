@@ -18,8 +18,8 @@ This code is written in Python 3.6.x. If you want to contribute to this project 
 - [x] getDomainInfo: Get essential information on a domain within your account
 - [x] contactList: View all contact profiles in your account
 - [x] contactAdd: Add a contact profile to your account
-- [ ] contactUpdate: Update a contact profile in account
-- [ ] contactDelete: Delete a contact profile in account
+- [x] contactUpdate: Update a contact profile in account
+- [x] contactDelete: Delete a contact profile in account
 - [ ] contactDomainAssociate: Associate contact profiles with a domain
 - [ ] dnsListRecords: View all DNS records associated with your domain
 - [ ] dnsAddRecord: Add a new DNS resource record
