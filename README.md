@@ -25,7 +25,7 @@ This code is written in Python 3.6.x. If you want to contribute to this project 
 - [ ] dnsAddRecord: Add a new DNS resource record
 - [ ] dnsUpdateRecord: Update an existing DNS resource record
 - [ ] dnsDeleteRecord: Delete an existing DNS resource record
-- [ ] changeNameServers: Change the NameServers for up to 200 domains
+- [x] changeNameServers: Change the NameServers for up to 200 domains
 - [ ] portfolioList: List the active portfolios within your account
 - [ ] portfolioAdd: Add a portfolio to your account
 - [ ] portfolioDelete: Delete a portfolio from your account

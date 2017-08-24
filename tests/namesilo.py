@@ -147,6 +147,19 @@ class NamesiloTestCase(unittest.TestCase):
         mock_content_xml.assert_called_once()
 
     @mock.patch('main.NameSilo._get_content_xml')
+    def test_change_domain_nameservers(self, mock_content_xml):
+        mock_content_xml.return_value = mocked_data
+        self.assertTrue(
+            self.namesilo.change_domain_nameservers(
+                "example.com", "NS1.EXAMPLE.COM", "NS2.EXAMPLE.COM"
+            )
+        )
+        mock_content_xml.assert_called_once_with(
+            "changeNameServers?version=1&type=xml&key=name-silo-token&"
+            "domain=example.com&ns1=NS1.EXAMPLE.COM&ns2=NS2.EXAMPLE.COM"
+        )
+
+    @mock.patch('main.NameSilo._get_content_xml')
     def test_domain_registration_fail(self, mock_content_xml):
         domain_name = "some-domain.com"
         mocked_data['namesilo']['reply']['code'] = 261
