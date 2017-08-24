@@ -2,7 +2,7 @@ import unittest
 
 from unittest import mock
 
-from main import NameSilo, ContactModel
+from namesilo import NameSilo, ContactModel
 from common.models import DomainInfo
 from common.error_codes import check_error_code
 from tests.mocked_data import mocked_data, mocked_single_contact
