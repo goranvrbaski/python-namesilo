@@ -233,6 +233,13 @@ class NameSilo:
         return True
 
     def delete_contact(self, contact_id):
+        """
+        Delete contact from NameSilo account
+
+        :param int contact_id: Contact ID
+        :return:
+        :rtype: None
+        """
         url_extend = f"contactDelete?version=1&type=xml&key={self._token}&" \
                      f"contact_id={contact_id}"
         parsed_context = self._process_data(url_extend)
