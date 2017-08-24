@@ -97,8 +97,8 @@ class NameSilo:
         check_error_code(self._get_error_code(parsed_content))
         if 'available' in parsed_content['namesilo']['reply'].keys():
             return True
-        else:
-            return False
+
+        return False
 
     def get_domain_info(self, domain_name):
         """
@@ -208,7 +208,7 @@ class NameSilo:
 
         return contacts
 
-    def add_contact(self, contact):
+    def add_contact(self, contact: ContactModel):
         """
         Adding new contact for current account
 
@@ -226,11 +226,24 @@ class NameSilo:
         check_error_code(self._get_error_code(parsed_context))
         return True
 
-    # TODO: need to finish update contact
-    def update_contact(self, contact: ContactModel):
-        url_extend = f"contactUpdate?version=1&type=xml&key={self._token}&contact_id=1440&fn=Goran&ln=Vrbaski&ad=123%20N.%201st%20Street&cy=Anywhere&st=AZ&zp=55555&ct=US&em=test@test.com&ph=4805555555"
-        parsed_contect = self._process_data(url_extend)
-        return True
+    def update_contact(self, contact_id, contact: ContactModel):
+        """
+        Update existing contact with new information
+
+        :param str contact_id: contact id to change
+        :param ContactModel contact: new contact information
+        :return: status of action
+        :rtype: bool
+        """
+        url_extend = f"contactUpdate?version=1&type=xml&key={self._token}&" \
+                     f"contact_id={contact_id}&" \
+                     f"fn={contact.first_name}%20{contact.last_name}&" \
+                     f"ad={contact.address}&cy={contact.city}&" \
+                     f"st={contact.state}&zp={contact.zip}&" \
+                     f"ct={contact.country}&em={contact.email}&" \
+                     f"ph={contact.phone}"
+
+        return self._process_data(url_extend)
 
     def delete_contact(self, contact_id):
         """
@@ -251,15 +264,15 @@ class NameSilo:
 
         :param float amount: amount to add
         :param int payment_id: ID of payment (credit card)
-        :return: Status and amount after adding funds, example: *(True, 150.00)*
+        :return: Status and amount after adding funds, example: (True, 150.00)
         :rtype: tuple
         """
         url_extend = f"addAccountFunds?version=1&type=xml&key={self._token}&" \
                      f"amount={amount}&payment_id={payment_id}"
         parsed_context = self._get_content_xml(url_extend)
         check_error_code(self._get_error_code(parsed_context))
-        amount = parsed_context['namesilo']['reply']['new_balance'].replace(",", "")
-        return True, float(amount)
+        amount = parsed_context['namesilo']['reply']['new_balance']
+        return True, float(amount.replace(",", ""))
 
     def get_account_balance(self):
         """
@@ -271,5 +284,5 @@ class NameSilo:
         url_extend = f"getAccountBalance?version=1&type=xml&key={self._token}"
         parsed_context = self._get_content_xml(url_extend)
         check_error_code(self._get_error_code(parsed_context))
-        amount = parsed_context['namesilo']['reply']['balance'].replace(",", "")
-        return float(amount)
+        amount = parsed_context['namesilo']['reply']['balance']
+        return float(amount.replace(",", ""))

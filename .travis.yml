@@ -13,5 +13,10 @@ python:
 before_install:
   - export PYTHONPATH=$HOME/build/goranvrbaski/python-namesilo
 
-install: "pip install -r requirements.txt"
-script: python -m unittest tests/namesilo.py --verbose
+install:
+  - pip install -r requirements.txt
+  - pip install pylint
+
+script:
+  - python -m unittest tests/namesilo.py --verbose
+  - pylint main.py
