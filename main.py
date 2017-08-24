@@ -9,42 +9,65 @@ __author__ = 'goran.vrbaski'
 
 
 class ContactModel:
-    def __init__(self, first_name: str, last_name: str, address: str, city: str, state: str, country: str, email: str, phone: str, zip: str):
+    def __init__(self, **kwargs):
         """
         Model for manipulating NameSilo contacts
-        :param first_name: First Name
-        :param last_name: Last Name
-        :param address: Address
-        :param city: City
-        :param state: State
-        :param country: Country
-        :param email: Email address
-        :param phone: Telephone number
-        :param zip: ZIP Code
+
+        :param str contact_id: Contact ID
+        :param str first_name: First Name
+        :param str last_name: Last Name
+        :param str address: Address
+        :param str city: City
+        :param str state: State
+        :param str country: Country
+        :param str email: Email address
+        :param str phone: Telephone number
+        :param str zip: ZIP Code
         """
-        self.first_name = self.__correct_formating(first_name)
-        self.last_name = self.__correct_formating(last_name)
-        self.address = self.__correct_formating(address)
-        self.city = self.__correct_formating(city)
-        self.state = self.__correct_formating(state)
-        self.country = self.__correct_formating(country)
-        self.email = self.__correct_formating(email)
-        self.phone = self.__correct_formating(phone)
-        self.zip = self.__correct_formating(zip)
+        self.contact_id = self._correct_formating(kwargs.get('contact_id'))
+        self.first_name = self._correct_formating(kwargs.get('first_name'))
+        self.last_name = self._correct_formating(kwargs.get('last_name'))
+        self.address = self._correct_formating(kwargs.get('address'))
+        self.city = self._correct_formating(kwargs.get('city'))
+        self.state = self._correct_formating(kwargs.get('state'))
+        self.country = self._correct_formating(kwargs.get('country'))
+        self.email = self._correct_formating(kwargs.get('email'))
+        self.phone = self._correct_formating(kwargs.get('phone'))
+        self.zip = self._correct_formating(kwargs.get('zip'))
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} - {self.contact_id}"
 
     @staticmethod
-    def __correct_formating(data: str):
+    def convert_contact_model(reply):
+        return ContactModel(
+            contact_id=reply['contact_id'],
+            first_name=reply['first_name'],
+            last_name=reply['last_name'],
+            address=reply['address'],
+            city=reply['city'],
+            state=reply['state'],
+            country=reply['country'],
+            zip=reply['zip'],
+            email=reply['email'],
+            phone=reply['phone']
+        )
+
+    @staticmethod
+    def _correct_formating(data: str):
         """
         Replacing all whitespaces with %20 (NameSilo requirement)
         :param data:
-        :return:
+
+        :return: string
         """
         return data.replace(" ", "%20")
 
 
 class NameSilo:
-    def __init__(self, token: str, sandbox: bool=True):
+    def __init__(self, token, sandbox: True):
         """
+        Creating Namesilo object with given token
 
         :param token: access token from namesilo.com
         :param sandbox: true or false
@@ -62,7 +85,8 @@ class NameSilo:
 
     @staticmethod
     def _get_error_code(data):
-        return int(data['namesilo']['reply']['code']), data['namesilo']['reply']['detail']
+        return int(data['namesilo']['reply']['code']), \
+               data['namesilo']['reply']['detail']
 
     def _get_content_xml(self, url):
         api_request = requests.get(os.path.join(self.__base_url, url))
@@ -74,11 +98,13 @@ class NameSilo:
         content = xmltodict.parse(api_request.content.decode())
         return content
 
-    def check_domain(self, domain_name: str):
+    def check_domain(self, domain_name):
         """
         Check if domain name is available
-        :param domain_name:
-        :return:
+
+        :param str domain_name: Domain name for checking
+        :return: Availability of domain
+        :rtype: bool
         """
         url_extend = f"checkRegisterAvailability?version=1&type=xml&" \
                      f"key={self._token}&domains={domain_name}"
@@ -89,11 +115,13 @@ class NameSilo:
         else:
             return False
 
-    def get_domain_info(self, domain_name: str):
+    def get_domain_info(self, domain_name):
         """
         Returns information about specified domain
-        :param domain_name:
-        :return: DomainInfo model from common.models
+
+        :param str domain_name: name of domain
+        :return: domain information
+        :rtype: DomainInfo
         """
         url_extend = f"getDomainInfo?version=1&type=xml&key={self._token}&" \
                      f"domain={domain_name}"
@@ -101,24 +129,36 @@ class NameSilo:
         check_error_code(self._get_error_code(parsed_content))
         return DomainInfo(parsed_content)
 
+    def change_domain_nameservers(self, domain, prim_ns, sec_ns):
+        url_extend = f"changeNameServers?version=1&" \
+                     f"type=xml&key={self._token}&domain={domain}&" \
+                     f"ns1={prim_ns}&ns2={sec_ns}"
+        parsed_content = self._get_content_xml(url_extend)
+        check_error_code(self._get_error_code(parsed_content))
+        return True
+
     def list_domains(self):
         """
         List all domains registered with current account
+
         :return: list of registered domains
+        :rtype: list
         """
         url_extend = f"listDomains?version=1&type=xml&key={self._token}"
         parsed_content = self._get_content_xml(url_extend)
         check_error_code(self._get_error_code(parsed_content))
         return parsed_content['namesilo']['reply']['domains']['domain']
 
-    def register_domain(self, domain_name: str, years: int=1, auto_renew: int=0, private: int=0):
+    def register_domain(self, domain_name, years=1, auto_renew=0, private=0):
         """
-        Register domain name
-        :param domain_name: name of domain
-        :param years:
-        :param auto_renew:
-        :param private:
-        :return:
+        Register a new domain name
+
+        :param str domain_name: name of domain
+        :param int years: how long to register domain
+        :param int auto_renew: turn on or off auto-renewal option
+        :param int private: hide your private information (WHOIS)
+        :return: status of domain registration
+        :rtype: bool
         """
         url_extend = f"registerDomain?version=1&type=xml&key={self._token}&" \
                      f"domain={domain_name}&years={years}&private={private}&" \
@@ -127,12 +167,14 @@ class NameSilo:
         check_error_code(self._get_error_code(parsed_content))
         return True
 
-    def renew_domain(self, domain_name: str, years: int=1):
+    def renew_domain(self, domain_name, years=1):
         """
         Renew domain name
-        :param domain_name:
-        :param years:
-        :return:
+
+        :param str domain_name: domain name for renewal
+        :param int years:
+        :return: status of renewal
+        :rtype: bool
         """
         url_extend = f"renewDomain?version=1&type=xml&key={self._token}&" \
                      f"domain={domain_name}&years={years}"
@@ -142,8 +184,10 @@ class NameSilo:
 
     def get_prices(self):
         """
-        Returns all supported tld prices
-        :return:
+        Returns all prices for supported TLDs
+
+        :return: Prices for supported TLDs
+        :rtype: dict
         """
         url_extend = f"getPrices?version=1&type=xml&key={self._token}"
         parsed_content = self._get_content_xml(url_extend)
@@ -153,21 +197,32 @@ class NameSilo:
     def list_contacts(self):
         """
         Returns list of all contacts for current account
-        :return:
+
+        :return: list of all contacts
+        :rtype: list
         """
         contacts = []
         url_extend = f"contactList?version=1&type=xml&key={self._token}"
         parsed_context = self._get_content_xml(url_extend)
         check_error_code(self._get_error_code(parsed_context))
-        for contact in parsed_context['namesilo']['reply']['contact']:
-            contacts.append(contact)
+        reply = parsed_context['namesilo']['reply']['contact']
+
+        if isinstance(reply, list):
+            for contact in reply:
+                contacts.append(ContactModel.convert_contact_model(contact))
+
+        elif isinstance(reply, dict):
+            contacts.append(ContactModel.convert_contact_model(reply))
+
         return contacts
 
-    def add_contact(self, contact: ContactModel):
+    def add_contact(self, contact):
         """
         Adding new contact for current account
-        :param contact:
-        :return:
+
+        :param ContactModel contact:
+        :return: Status for adding contact
+        :rtype: bool
         """
         url_extend = f"contactAdd?version=1&type=xml&key={self._token}&" \
                      f"fn={contact.first_name}&ln={contact.last_name}&" \
@@ -179,23 +234,63 @@ class NameSilo:
         check_error_code(self._get_error_code(parsed_context))
         return True
 
-    # TODO: need to finish update contact
-    def update_contact(self, contact: ContactModel):
-        url_extend = f"contactUpdate?version=1&type=xml&key={self._token}&contact_id=1440&fn=Goran&ln=Vrbaski&ad=123%20N.%201st%20Street&cy=Anywhere&st=AZ&zp=55555&ct=US&em=test@test.com&ph=4805555555"
-        parsed_contect = self._process_data(url_extend)
-        return True
+    def update_contact(self, contact_id, contact: ContactModel):
+        """
+        Update existing contact with new information
 
-    def add_account_funds(self, amount: float, payment_id: int):
+        :param str contact_id: contact id to change
+        :param ContactModel contact: new contact information
+        :return: status of action
+        :rtype: bool
+        """
+        url_extend = f"contactUpdate?version=1&type=xml&key={self._token}&" \
+                     f"contact_id={contact_id}&" \
+                     f"fn={contact.first_name}%20{contact.last_name}&" \
+                     f"ad={contact.address}&cy={contact.city}&" \
+                     f"st={contact.state}&zp={contact.zip}&" \
+                     f"ct={contact.country}&em={contact.email}&" \
+                     f"ph={contact.phone}"
+
+        return self._process_data(url_extend)
+
+    def delete_contact(self, contact_id):
+        """
+        Delete contact from NameSilo account
+
+        :param int contact_id: Contact ID
+        :return:
+        :rtype: None
+        """
+        url_extend = f"contactDelete?version=1&type=xml&key={self._token}&" \
+                     f"contact_id={contact_id}"
+        parsed_context = self._process_data(url_extend)
+        return parsed_context
+
+    def add_account_funds(self, amount, payment_id):
+        """
+        Adding funds to Namesilo account
+
+        :param float amount: amount to add
+        :param int payment_id: ID of payment (credit card)
+        :return: Status and amount after adding funds, example: (True, 150.00)
+        :rtype: tuple
+        """
         url_extend = f"addAccountFunds?version=1&type=xml&key={self._token}&" \
                      f"amount={amount}&payment_id={payment_id}"
         parsed_context = self._get_content_xml(url_extend)
         check_error_code(self._get_error_code(parsed_context))
-        amount = parsed_context['namesilo']['reply']['new_balance'].replace(",", "")
-        return True, float(amount)
+        amount = parsed_context['namesilo']['reply']['new_balance']
+        return True, float(amount.replace(",", ""))
 
     def get_account_balance(self):
+        """
+        Returns current account balance
+
+        :return: current account balance
+        :rtype: float
+        """
         url_extend = f"getAccountBalance?version=1&type=xml&key={self._token}"
         parsed_context = self._get_content_xml(url_extend)
         check_error_code(self._get_error_code(parsed_context))
-        amount = parsed_context['namesilo']['reply']['balance'].replace(",", "")
-        return float(amount)
+        amount = parsed_context['namesilo']['reply']['balance']
+        return float(amount.replace(",", ""))

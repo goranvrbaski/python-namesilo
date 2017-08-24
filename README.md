@@ -1,7 +1,7 @@
 # python-namesilo
 [![Build Status](https://travis-ci.org/goranvrbaski/python-namesilo.svg?branch=develop)](https://travis-ci.org/goranvrbaski/python-namesilo)
 
-version: 0.0.1
+version: 0.1.0
 
 This code is written in Python 3.6.x. If you want to contribute to this project feel free to contact me at any time.
 
@@ -18,14 +18,14 @@ This code is written in Python 3.6.x. If you want to contribute to this project 
 - [x] getDomainInfo: Get essential information on a domain within your account
 - [x] contactList: View all contact profiles in your account
 - [x] contactAdd: Add a contact profile to your account
-- [ ] contactUpdate: Update a contact profile in account
-- [ ] contactDelete: Delete a contact profile in account
+- [x] contactUpdate: Update a contact profile in account
+- [x] contactDelete: Delete a contact profile in account
 - [ ] contactDomainAssociate: Associate contact profiles with a domain
 - [ ] dnsListRecords: View all DNS records associated with your domain
 - [ ] dnsAddRecord: Add a new DNS resource record
 - [ ] dnsUpdateRecord: Update an existing DNS resource record
 - [ ] dnsDeleteRecord: Delete an existing DNS resource record
-- [ ] changeNameServers: Change the NameServers for up to 200 domains
+- [x] changeNameServers: Change the NameServers for up to 200 domains
 - [ ] portfolioList: List the active portfolios within your account
 - [ ] portfolioAdd: Add a portfolio to your account
 - [ ] portfolioDelete: Delete a portfolio from your account
