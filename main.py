@@ -13,6 +13,7 @@ class ContactModel:
         """
         Model for manipulating NameSilo contacts
 
+        :param str contact_id: Contact ID
         :param str first_name: First Name
         :param str last_name: Last Name
         :param str address: Address
@@ -23,6 +24,7 @@ class ContactModel:
         :param str phone: Telephone number
         :param str zip: ZIP Code
         """
+        self.contact_id = self._correct_formating(kwargs.get('contact_id'))
         self.first_name = self._correct_formating(kwargs.get('first_name'))
         self.last_name = self._correct_formating(kwargs.get('last_name'))
         self.address = self._correct_formating(kwargs.get('address'))
@@ -32,6 +34,9 @@ class ContactModel:
         self.email = self._correct_formating(kwargs.get('email'))
         self.phone = self._correct_formating(kwargs.get('phone'))
         self.zip = self._correct_formating(kwargs.get('zip'))
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} - {self.contact_id}"
 
     @staticmethod
     def _correct_formating(data: str):
@@ -166,6 +171,21 @@ class NameSilo:
         check_error_code(self._get_error_code(parsed_content))
         return parsed_content['namesilo']['reply']
 
+    @staticmethod
+    def _convert_contact_model(reply):
+        return ContactModel(
+            contact_id=reply['contact_id'],
+            first_name=reply['first_name'],
+            last_name=reply['last_name'],
+            address=reply['address'],
+            city=reply['city'],
+            state=reply['state'],
+            country=reply['country'],
+            zip=reply['zip'],
+            email=reply['email'],
+            phone=reply['phone']
+        )
+
     def list_contacts(self):
         """
         Returns list of all contacts for current account
@@ -177,8 +197,15 @@ class NameSilo:
         url_extend = f"contactList?version=1&type=xml&key={self._token}"
         parsed_context = self._get_content_xml(url_extend)
         check_error_code(self._get_error_code(parsed_context))
-        for contact in parsed_context['namesilo']['reply']['contact']:
-            contacts.append(contact)
+        reply = parsed_context['namesilo']['reply']['contact']
+
+        if isinstance(reply, list):
+            for contact in reply:
+                contacts.append(self._convert_contact_model(contact))
+
+        elif isinstance(reply, dict):
+            contacts.append(self._convert_contact_model(reply))
+
         return contacts
 
     def add_contact(self, contact):
@@ -204,6 +231,12 @@ class NameSilo:
         url_extend = f"contactUpdate?version=1&type=xml&key={self._token}&contact_id=1440&fn=Goran&ln=Vrbaski&ad=123%20N.%201st%20Street&cy=Anywhere&st=AZ&zp=55555&ct=US&em=test@test.com&ph=4805555555"
         parsed_contect = self._process_data(url_extend)
         return True
+
+    def delete_contact(self, contact_id):
+        url_extend = f"contactDelete?version=1&type=xml&key={self._token}&" \
+                     f"contact_id={contact_id}"
+        parsed_context = self._process_data(url_extend)
+        return parsed_context
 
     def add_account_funds(self, amount, payment_id):
         """
