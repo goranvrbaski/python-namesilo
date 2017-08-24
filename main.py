@@ -39,6 +39,21 @@ class ContactModel:
         return f"{self.first_name} {self.last_name} - {self.contact_id}"
 
     @staticmethod
+    def convert_contact_model(reply):
+        return ContactModel(
+            contact_id=reply['contact_id'],
+            first_name=reply['first_name'],
+            last_name=reply['last_name'],
+            address=reply['address'],
+            city=reply['city'],
+            state=reply['state'],
+            country=reply['country'],
+            zip=reply['zip'],
+            email=reply['email'],
+            phone=reply['phone']
+        )
+
+    @staticmethod
     def _correct_formating(data: str):
         """
         Replacing all whitespaces with %20 (NameSilo requirement)
@@ -171,21 +186,6 @@ class NameSilo:
         check_error_code(self._get_error_code(parsed_content))
         return parsed_content['namesilo']['reply']
 
-    @staticmethod
-    def _convert_contact_model(reply):
-        return ContactModel(
-            contact_id=reply['contact_id'],
-            first_name=reply['first_name'],
-            last_name=reply['last_name'],
-            address=reply['address'],
-            city=reply['city'],
-            state=reply['state'],
-            country=reply['country'],
-            zip=reply['zip'],
-            email=reply['email'],
-            phone=reply['phone']
-        )
-
     def list_contacts(self):
         """
         Returns list of all contacts for current account
@@ -201,10 +201,10 @@ class NameSilo:
 
         if isinstance(reply, list):
             for contact in reply:
-                contacts.append(self._convert_contact_model(contact))
+                contacts.append(ContactModel.convert_contact_model(contact))
 
         elif isinstance(reply, dict):
-            contacts.append(self._convert_contact_model(reply))
+            contacts.append(ContactModel.convert_contact_model(reply))
 
         return contacts
 
@@ -226,11 +226,24 @@ class NameSilo:
         check_error_code(self._get_error_code(parsed_context))
         return True
 
-    # TODO: need to finish update contact
-    def update_contact(self, contact: ContactModel):
-        url_extend = f"contactUpdate?version=1&type=xml&key={self._token}&contact_id=1440&fn=Goran&ln=Vrbaski&ad=123%20N.%201st%20Street&cy=Anywhere&st=AZ&zp=55555&ct=US&em=test@test.com&ph=4805555555"
-        parsed_contect = self._process_data(url_extend)
-        return True
+    def update_contact(self, contact_id, contact: ContactModel):
+        """
+        Update existing contact with new information
+
+        :param str contact_id: contact id to change
+        :param ContactModel contact: new contact information
+        :return: status of action
+        :rtype: bool
+        """
+        url_extend = f"contactUpdate?version=1&type=xml&key={self._token}&" \
+                     f"contact_id={contact_id}&" \
+                     f"fn={contact.first_name}%20{contact.last_name}&" \
+                     f"ad={contact.address}&cy={contact.city}&" \
+                     f"st={contact.state}&zp={contact.zip}&" \
+                     f"ct={contact.country}&em={contact.email}&" \
+                     f"ph={contact.phone}"
+
+        return self._process_data(url_extend)
 
     def delete_contact(self, contact_id):
         """
