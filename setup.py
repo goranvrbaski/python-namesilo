@@ -23,7 +23,7 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules'
     ],
     url='https://github.com/goranvrbaski/python-namesilo',
-    license='MIT',
+    license='GPLv3+',
     author='Goran Vrbaski',
     author_email='vrbaski.goran@gmail.com',
     description='API wrapper for Namesilo service',
