@@ -115,8 +115,7 @@ class NameSilo:
         """
         url_extend = f"checkRegisterAvailability?version=1&type=xml&" \
                      f"key={self._token}&domains={domain_name}"
-        parsed_content = self._get_content_xml(url_extend)
-        check_error_code(self._get_error_code(parsed_content))
+        parsed_content = self._process_data(url_extend)
         if 'available' in parsed_content['namesilo']['reply'].keys():
             return True
 
@@ -132,8 +131,7 @@ class NameSilo:
         """
         url_extend = f"getDomainInfo?version=1&type=xml&key={self._token}&" \
                      f"domain={domain_name}"
-        parsed_content = self._get_content_xml(url_extend)
-        check_error_code(self._get_error_code(parsed_content))
+        parsed_content = self._process_data(url_extend)
         return DomainInfo(parsed_content)
 
     def change_domain_nameservers(self, domain, primary_ns, secondary_ns):
@@ -149,8 +147,7 @@ class NameSilo:
         url_extend = f"changeNameServers?version=1&" \
                      f"type=xml&key={self._token}&domain={domain}&" \
                      f"ns1={primary_ns}&ns2={secondary_ns}"
-        parsed_content = self._get_content_xml(url_extend)
-        check_error_code(self._get_error_code(parsed_content))
+        self._process_data(url_extend)
         return True
 
     def list_domains(self):
@@ -161,8 +158,7 @@ class NameSilo:
         :rtype: list
         """
         url_extend = f"listDomains?version=1&type=xml&key={self._token}"
-        parsed_content = self._get_content_xml(url_extend)
-        check_error_code(self._get_error_code(parsed_content))
+        parsed_content = self._process_data(url_extend)
         return parsed_content['namesilo']['reply']['domains']['domain']
 
     def register_domain(self, domain_name, years=1, auto_renew=0, private=0):
@@ -179,8 +175,7 @@ class NameSilo:
         url_extend = f"registerDomain?version=1&type=xml&key={self._token}&" \
                      f"domain={domain_name}&years={years}&private={private}&" \
                      f"auto_renew={auto_renew}"
-        parsed_content = self._get_content_xml(url_extend)
-        check_error_code(self._get_error_code(parsed_content))
+        self._process_data(url_extend)
         return True
 
     def renew_domain(self, domain_name, years=1):
@@ -194,8 +189,7 @@ class NameSilo:
         """
         url_extend = f"renewDomain?version=1&type=xml&key={self._token}&" \
                      f"domain={domain_name}&years={years}"
-        parsed_content = self._get_content_xml(url_extend)
-        check_error_code(self._get_error_code(parsed_content))
+        self._process_data(url_extend)
         return True
 
     def lock_domain(self, domain_name: str):
@@ -206,8 +200,7 @@ class NameSilo:
         """
         url_extend = f"domainLock?version=1&type=xml&key={self._token}&" \
                      f"domain={domain_name}"
-        parsed_content = self._get_content_xml(url_extend)
-        check_error_code(self._get_error_code(parsed_content))
+        self._process_data(url_extend)
         return True
 
     def unlock_domain(self, domain_name: str):
@@ -218,8 +211,7 @@ class NameSilo:
         """
         url_extend = f"domainUnlock?version=1&type=xml&key={self._token}&" \
                      f"domain={domain_name}"
-        parsed_content = self._get_content_xml(url_extend)
-        check_error_code(self._get_error_code(parsed_content))
+        self._process_data(url_extend)
         return True
 
     def get_prices(self):
@@ -230,8 +222,7 @@ class NameSilo:
         :rtype: dict
         """
         url_extend = f"getPrices?version=1&type=xml&key={self._token}"
-        parsed_content = self._get_content_xml(url_extend)
-        check_error_code(self._get_error_code(parsed_content))
+        parsed_content = self._process_data(url_extend)
         return parsed_content['namesilo']['reply']
 
     def list_contacts(self):
@@ -243,8 +234,7 @@ class NameSilo:
         """
         contacts = []
         url_extend = f"contactList?version=1&type=xml&key={self._token}"
-        parsed_context = self._get_content_xml(url_extend)
-        check_error_code(self._get_error_code(parsed_context))
+        parsed_context = self._process_data(url_extend)
         reply = parsed_context['namesilo']['reply']['contact']
 
         if isinstance(reply, list):
@@ -270,8 +260,7 @@ class NameSilo:
                      f"st={contact.state}&zp={contact.zip}&" \
                      f"ct={contact.country}&em={contact.email}&" \
                      f"ph={contact.phone}"
-        parsed_context = self._get_content_xml(url_extend)
-        check_error_code(self._get_error_code(parsed_context))
+        self._process_data(url_extend)
         return True
 
     def update_contact(self, contact_id, contact: ContactModel):
@@ -317,8 +306,7 @@ class NameSilo:
         """
         url_extend = f"addAccountFunds?version=1&type=xml&key={self._token}&" \
                      f"amount={amount}&payment_id={payment_id}"
-        parsed_context = self._get_content_xml(url_extend)
-        check_error_code(self._get_error_code(parsed_context))
+        parsed_context = self._process_data(url_extend)
         amount = parsed_context['namesilo']['reply']['new_balance']
         return True, float(amount.replace(",", ""))
 
@@ -330,7 +318,6 @@ class NameSilo:
         :rtype: float
         """
         url_extend = f"getAccountBalance?version=1&type=xml&key={self._token}"
-        parsed_context = self._get_content_xml(url_extend)
-        check_error_code(self._get_error_code(parsed_context))
+        parsed_context = self._process_data(url_extend)
         amount = parsed_context['namesilo']['reply']['balance']
         return float(amount.replace(",", ""))
