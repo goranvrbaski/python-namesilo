@@ -263,24 +263,24 @@ class NameSilo:
         self._process_data(url_extend)
         return True
 
-    def update_contact(self, contact_id, contact: ContactModel):
+    def update_contact(self, contact: ContactModel):
         """
         Update existing contact with new information
 
-        :param str contact_id: contact id to change
         :param ContactModel contact: new contact information
         :return: status of action
         :rtype: bool
         """
         url_extend = f"contactUpdate?version=1&type=xml&key={self._token}&" \
-                     f"contact_id={contact_id}&" \
+                     f"contact_id={contact.contact_id}&" \
                      f"fn={contact.first_name}%20{contact.last_name}&" \
                      f"ad={contact.address}&cy={contact.city}&" \
                      f"st={contact.state}&zp={contact.zip}&" \
                      f"ct={contact.country}&em={contact.email}&" \
                      f"ph={contact.phone}"
 
-        return self._process_data(url_extend)
+        self._process_data(url_extend)
+        return True
 
     def delete_contact(self, contact_id):
         """

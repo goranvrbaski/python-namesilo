@@ -139,6 +139,31 @@ class NSTestCase(unittest.TestCase):
         )
 
     @mock.patch('namesilo.NameSilo._process_data')
+    def test_update_contact(self, mock_content_xml):
+        temp_contact = ContactModel(
+            contact_id="10050",
+            first_name="First",
+            last_name="Last",
+            address="Some address",
+            city="Some city",
+            state="Some state",
+            country="US",
+            email="some.email@some-provider.com",
+            phone="00381695959559",
+            zip="21000"
+        )
+        self.assertTrue(
+            self.ns.update_contact(temp_contact)
+        )
+
+        mock_content_xml.assert_called_once_with(
+            "contactUpdate?version=1&type=xml&key=name-silo-token&"
+            "contact_id=10050&fn=First%20Last&ad=Some%20address&"
+            "cy=Some%20city&st=Some%20state&zp=21000&ct=US&"
+            "em=some.email@some-provider.com&ph=00381695959559"
+        )
+
+    @mock.patch('namesilo.NameSilo._process_data')
     def test_delete_contact(self, mock_process):
         mock_process.return_value = dict()
         self.ns.delete_contact(500)
