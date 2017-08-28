@@ -9,7 +9,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='python-namesilo',
-    version='0.1.6',
+    version='0.1.7.1',
     packages=find_packages(exclude=['docs', 'tests']),
     install_requires=['requests', 'xmltodict'],
     python_requires='>=3.6',
@@ -23,7 +23,7 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules'
     ],
     url='https://github.com/goranvrbaski/python-namesilo',
-    license='MIT',
+    license='GPLv3+',
     author='Goran Vrbaski',
     author_email='vrbaski.goran@gmail.com',
     description='API wrapper for Namesilo service',
