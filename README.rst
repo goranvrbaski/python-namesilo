@@ -3,7 +3,7 @@ python-namesilo
 
 |Build Status| |CodeCov| |PyPiVersion|
 
-version: 0.1.7
+version: 0.1.7.1
 
 This code is written in Python 3.6.x. If you want to contribute to this
 project feel free to contact me at any time.

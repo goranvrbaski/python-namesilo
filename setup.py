@@ -9,7 +9,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='python-namesilo',
-    version='0.1.7',
+    version='0.1.7.1',
     packages=find_packages(exclude=['docs', 'tests']),
     install_requires=['requests', 'xmltodict'],
     python_requires='>=3.6',
