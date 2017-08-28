@@ -12,12 +12,12 @@ class NSTestCase(unittest.TestCase):
     def setUp(self):
         self.ns = NameSilo("name-silo-token", sandbox=True)
 
-    @mock.patch('namesilo.NameSilo._get_content_xml')
-    @mock.patch('namesilo.check_error_code')
     @mock.patch('namesilo.NameSilo._get_error_code')
+    @mock.patch('namesilo.check_error_code')
+    @mock.patch('namesilo.NameSilo._get_content_xml')
     def test_process_data(self, mock_xml, mock_check, mock_error_code):
         self.ns._process_data("some-url-extend")
-        mock_xml.assert_called_once()
+        mock_xml.assert_called_once_with("some-url-extend")
         mock_check.assert_called_once()
         mock_error_code.assert_called_once()
 
@@ -41,29 +41,29 @@ class NSTestCase(unittest.TestCase):
         self.assertRaises(Exception, self.ns._get_content_xml, 'url')
         mock_requests.assert_called_once()
 
-    @mock.patch('namesilo.NameSilo._get_content_xml')
-    def test_account_balance(self, mock_content_xml):
-        mock_content_xml.return_value = mocked_data
+    @mock.patch('namesilo.NameSilo._process_data')
+    def test_account_balance(self, mock_process_data):
+        mock_process_data.return_value = mocked_data
         balance = self.ns.get_account_balance()
         self.assertIsInstance(balance, float)
         self.assertEqual(balance, 500)
-        mock_content_xml.assert_called_once()
+        mock_process_data.assert_called_once()
 
-    @mock.patch('namesilo.NameSilo._get_content_xml')
+    @mock.patch('namesilo.NameSilo._process_data')
     def test_add_funds(self, mock_content_xml):
         mock_content_xml.return_value = mocked_data
         status, balance = self.ns.add_account_funds(5, 281)
         self.assertEqual(balance, 505)
         mock_content_xml.assert_called_once()
 
-    @mock.patch('namesilo.NameSilo._get_content_xml')
+    @mock.patch('namesilo.NameSilo._process_data')
     def test_domain_check_available(self, mock_content_xml):
         domain_name = "some-domain.com"
         mock_content_xml.return_value = mocked_data
         self.assertTrue(self.ns.check_domain(domain_name))
         mock_content_xml.assert_called_once()
 
-    @mock.patch('namesilo.NameSilo._get_content_xml')
+    @mock.patch('namesilo.NameSilo._process_data')
     def test_domain_check_not_available(self, mock_content_xml):
         domain_name = "some-domain.com"
         del mocked_data['namesilo']['reply']['available']
@@ -71,14 +71,14 @@ class NSTestCase(unittest.TestCase):
         self.assertFalse(self.ns.check_domain(domain_name))
         mock_content_xml.assert_called_once()
 
-    @mock.patch('namesilo.NameSilo._get_content_xml')
+    @mock.patch('namesilo.NameSilo._process_data')
     def test_domain_registration(self, mock_content_xml):
         domain_name = "some-domain.com"
         mock_content_xml.return_value = mocked_data
         self.assertTrue(self.ns.register_domain(domain_name))
         mock_content_xml.assert_called_once()
 
-    @mock.patch('namesilo.NameSilo._get_content_xml')
+    @mock.patch('namesilo.NameSilo._process_data')
     def test_domain_renewal(self, mock_content_xml):
         domain_name = "some-domain.com"
         mocked_data['namesilo']['reply']['code'] = 300
@@ -86,7 +86,7 @@ class NSTestCase(unittest.TestCase):
         self.assertTrue(self.ns.renew_domain(domain_name))
         mock_content_xml.assert_called_once()
 
-    @mock.patch('namesilo.NameSilo._get_content_xml')
+    @mock.patch('namesilo.NameSilo._process_data')
     def test_lock_domain(self, mock_content_xml):
         mock_content_xml.return_value = mocked_data
         self.assertTrue(self.ns.lock_domain("example.com"))
@@ -95,7 +95,7 @@ class NSTestCase(unittest.TestCase):
             "domain=example.com"
         )
 
-    @mock.patch('namesilo.NameSilo._get_content_xml')
+    @mock.patch('namesilo.NameSilo._process_data')
     def test_unlock_domain(self, mock_content_xml):
         mock_content_xml.return_value = mocked_data
         self.assertTrue(self.ns.unlock_domain("example.com"))
@@ -104,7 +104,7 @@ class NSTestCase(unittest.TestCase):
             "domain=example.com"
         )
 
-    @mock.patch('namesilo.NameSilo._get_content_xml')
+    @mock.patch('namesilo.NameSilo._process_data')
     def test_list_domains(self, mock_content_xml):
         mocked_data['namesilo']['reply']['code'] = 300
         mock_content_xml.return_value = mocked_data
@@ -114,19 +114,19 @@ class NSTestCase(unittest.TestCase):
         )
         mock_content_xml.assert_called_once()
 
-    @mock.patch('namesilo.NameSilo._get_content_xml')
+    @mock.patch('namesilo.NameSilo._process_data')
     def test_contacts_lists(self, mock_content_xml):
         mock_content_xml.return_value = mocked_data
         self.assertIsInstance(self.ns.list_contacts(), list)
         mock_content_xml.assert_called_once()
 
-    @mock.patch('namesilo.NameSilo._get_content_xml')
+    @mock.patch('namesilo.NameSilo._process_data')
     def test_contacts_lists_only_one_contact(self, mock_content_xml):
         mock_content_xml.return_value = mocked_single_contact
         self.assertIsInstance(self.ns.list_contacts(), list)
         mock_content_xml.assert_called_once()
 
-    @mock.patch('namesilo.NameSilo._get_content_xml')
+    @mock.patch('namesilo.NameSilo._process_data')
     def test_add_contact(self, mock_content_xml):
         mock_content_xml.return_value = mocked_single_contact
         self.assertTrue(self.ns.add_contact(ContactModel(
@@ -147,7 +147,7 @@ class NSTestCase(unittest.TestCase):
             "key=name-silo-token&contact_id=500"
         )
 
-    @mock.patch('namesilo.NameSilo._get_content_xml')
+    @mock.patch('namesilo.NameSilo._process_data')
     def test_domain_price(self, mock_content_xml):
         mock_content_xml.return_value = mocked_data
         self.assertIsInstance(self.ns.get_prices(), dict)
@@ -159,7 +159,7 @@ class NSTestCase(unittest.TestCase):
     def test_check_error_code_exception(self):
         self.assertRaises(Exception, check_error_code, (400, ""))
 
-    @mock.patch('namesilo.NameSilo._get_content_xml')
+    @mock.patch('namesilo.NameSilo._process_data')
     def test_get_domain_info(self, mock_content_xml):
         mock_content_xml.return_value = mocked_data
         mocked_data['namesilo']['reply']['code'] = 300
@@ -167,7 +167,7 @@ class NSTestCase(unittest.TestCase):
                               DomainInfo)
         mock_content_xml.assert_called_once()
 
-    @mock.patch('namesilo.NameSilo._get_content_xml')
+    @mock.patch('namesilo.NameSilo._process_data')
     def test_change_domain_nameservers(self, mock_content_xml):
         mock_content_xml.return_value = mocked_data
         self.assertTrue(
