@@ -152,6 +152,7 @@ class NSTestCase(unittest.TestCase):
             phone="00381695959559",
             zip="21000"
         )
+        self.assertEqual(temp_contact.__str__(), "First Last - 10050")
         self.assertTrue(
             self.ns.update_contact(temp_contact)
         )
