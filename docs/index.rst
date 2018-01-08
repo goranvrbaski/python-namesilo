@@ -22,7 +22,7 @@ Currently we support fallowing operations:
 
 https://www.namesilo.com/Support/API-Manager
 
-.. autoclass:: main.NameSilo
+.. autoclass:: namesilo.core.NameSilo
    :members:
 
 
