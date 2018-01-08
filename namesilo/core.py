@@ -2,8 +2,8 @@ import os
 import requests
 import xmltodict
 
-from common.models import DomainInfo
-from common.error_codes import check_error_code
+from namesilo.common import DomainInfo
+from namesilo.common import check_error_code
 
 __author__ = 'goran.vrbaski'
 
