@@ -12,6 +12,19 @@ project feel free to contact me at any time.
 pip install python-namesilo
 ```
 
+### Usage
+```python
+from namesilo.core import NameSilo
+
+client = NameSilo(token="your-token", sandbox=False)
+
+domain_available = client.check_domain("domain-to-register.com")
+
+if domain_available:
+    client.register_domain("domain-to-register.com")
+
+```
+
 ### Functionality Status
 
 | Functionality | Description | Implemented  |
