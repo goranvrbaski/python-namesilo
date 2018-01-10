@@ -1,5 +1,5 @@
 language: python
-cache: pip
+cmatterpip
 
 branches:
   only:
@@ -29,5 +29,5 @@ deploy:
   user: goran.vrbaski
   password: $pypi_pass
   on:
-    tags: true
+    tags: false
     branch: master
