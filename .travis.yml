@@ -1,5 +1,5 @@
 language: python
-cmatterpip
+cache: pip
 
 branches:
   only:
