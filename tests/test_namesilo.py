@@ -213,6 +213,26 @@ class NSTestCase(unittest.TestCase):
         self.assertRaises(Exception, self.ns.register_domain, domain_name)
         mock_content_xml.assert_called_once()
 
+    @mock.patch('namesilo.core.NameSilo._process_data')
+    def test_add_domain_privacy(self, mock_content_xml):
+        domain_name = "some-domain.com"
+        mock_content_xml.return_value = mocked_data
+        self.assertTrue(self.ns.add_domain_privacy(domain_name))
+        mock_content_xml.assert_called_once_with(
+            "addPrivacy?version=1&type=xml&key=name-silo-token&"
+            "domain=some-domain.com"
+        )
+
+    @mock.patch('namesilo.core.NameSilo._process_data')
+    def test_remove_domain_privacy(self, mock_content_xml):
+        domain_name = "some-domain.com"
+        mock_content_xml.return_value = mocked_data
+        self.assertTrue(self.ns.remove_domain_privacy(domain_name))
+        mock_content_xml.assert_called_once_with(
+            "removePrivacy?version=1&type=xml&key=name-silo-token&"
+            "domain=some-domain.com"
+        )
+
 
 if __name__ == '__main__':
     try:

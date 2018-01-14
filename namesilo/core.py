@@ -329,3 +329,27 @@ class NameSilo:
         parsed_context = self._process_data(url_extend)
         amount = parsed_context['namesilo']['reply']['balance']
         return float(amount.replace(",", ""))
+
+    def add_domain_privacy(self, domain_name):
+        """
+        Adds privacy to specified domain name
+        :param str domain_name: Domain name for adding privacy
+        :return: Status of action
+        :rtype: bool
+        """
+        url_extend = f"addPrivacy?version=1&type=xml&key={self._token}&" \
+                     f"domain={domain_name}"
+        self._process_data(url_extend)
+        return True
+
+    def remove_domain_privacy(self, domain_name):
+        """
+        Removes privacy for specified domain name
+        :param str domain_name: Domain name for removing privacy
+        :return: Status of action
+        :rtype: bool
+        """
+        url_extend = f"removePrivacy?version=1&type=xml&key={self._token}&" \
+                     f"domain={domain_name}"
+        self._process_data(url_extend)
+        return True
