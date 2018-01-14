@@ -333,6 +333,7 @@ class NameSilo:
     def add_domain_privacy(self, domain_name):
         """
         Adds privacy to specified domain name
+
         :param str domain_name: Domain name for adding privacy
         :return: Status of action
         :rtype: bool
@@ -345,6 +346,7 @@ class NameSilo:
     def remove_domain_privacy(self, domain_name):
         """
         Removes privacy for specified domain name
+
         :param str domain_name: Domain name for removing privacy
         :return: Status of action
         :rtype: bool
