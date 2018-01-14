@@ -56,8 +56,8 @@ if domain_available:
 | addRegisteredNameServer| Add a Registered NameServer for one of your domains | No |
 | modifyRegisteredNameServer| Modify a Registered NameServer | No |
 | deleteRegisteredNameServer| Delete a Registered NameServer | No |
-| addPrivacy| Add WHOIS Privacy to a domain | No |
-| removePrivacy| Remove WHOIS Privacy from a domain | No |
+| addPrivacy| Add WHOIS Privacy to a domain | Yes |
+| removePrivacy| Remove WHOIS Privacy from a domain | Yes |
 | addAutoRenewal| Set your domain to be auto-renewed | No |
 | removeAutoRenewal| Remove the auto-renewal setting from your domain | No |
 | retrieveAuthCode| Have the EPP authorization code for the domain emailed to the administrative contact | No |
