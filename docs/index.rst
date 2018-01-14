@@ -25,6 +25,8 @@ https://www.namesilo.com/Support/API-Manager
 .. autoclass:: namesilo.core.NameSilo
    :members:
 
+.. autoclass:: namesilo.core.ContactModel
+   :members:
 
 Indices and tables
 ==================
