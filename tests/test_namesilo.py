@@ -4,7 +4,6 @@ from unittest import mock
 
 from namesilo.core import NameSilo, ContactModel
 from namesilo.common import DomainInfo
-from namesilo.common import check_error_code
 from tests.mocked_data import mocked_data, mocked_single_contact
 
 
@@ -13,7 +12,7 @@ class NSTestCase(unittest.TestCase):
         self.ns = NameSilo("name-silo-token", sandbox=True)
 
     @mock.patch('namesilo.core.NameSilo._get_error_code')
-    @mock.patch('namesilo.core.check_error_code')
+    @mock.patch('namesilo.core.NameSilo.check_error_code')
     @mock.patch('namesilo.core.NameSilo._get_content_xml')
     def test_process_data(self, mock_xml, mock_check, mock_error_code):
         self.ns._process_data("some-url-extend")
@@ -180,10 +179,10 @@ class NSTestCase(unittest.TestCase):
         mock_content_xml.assert_called_once()
 
     def test_check_error_code(self):
-        self.assertIsInstance(check_error_code((300, "")), str)
+        self.assertIsInstance(self.ns.check_error_code((300, "")), str)
 
     def test_check_error_code_exception(self):
-        self.assertRaises(Exception, check_error_code, (400, ""))
+        self.assertRaises(Exception, self.ns.check_error_code, (400, ""))
 
     @mock.patch('namesilo.core.NameSilo._process_data')
     def test_get_domain_info(self, mock_content_xml):
@@ -213,6 +212,26 @@ class NSTestCase(unittest.TestCase):
         mock_content_xml.return_value = mocked_data
         self.assertRaises(Exception, self.ns.register_domain, domain_name)
         mock_content_xml.assert_called_once()
+
+    @mock.patch('namesilo.core.NameSilo._process_data')
+    def test_add_domain_privacy(self, mock_content_xml):
+        domain_name = "some-domain.com"
+        mock_content_xml.return_value = mocked_data
+        self.assertTrue(self.ns.add_domain_privacy(domain_name))
+        mock_content_xml.assert_called_once_with(
+            "addPrivacy?version=1&type=xml&key=name-silo-token&"
+            "domain=some-domain.com"
+        )
+
+    @mock.patch('namesilo.core.NameSilo._process_data')
+    def test_remove_domain_privacy(self, mock_content_xml):
+        domain_name = "some-domain.com"
+        mock_content_xml.return_value = mocked_data
+        self.assertTrue(self.ns.remove_domain_privacy(domain_name))
+        mock_content_xml.assert_called_once_with(
+            "removePrivacy?version=1&type=xml&key=name-silo-token&"
+            "domain=some-domain.com"
+        )
 
 
 if __name__ == '__main__':

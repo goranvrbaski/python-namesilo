@@ -3,7 +3,7 @@ import requests
 import xmltodict
 
 from namesilo.common import DomainInfo
-from namesilo.common import check_error_code
+from namesilo.exceptions import exception_codes
 
 __author__ = 'goran.vrbaski'
 
@@ -87,13 +87,21 @@ class NameSilo:
 
     def _process_data(self, url_extend):
         parsed_context = self._get_content_xml(url_extend)
-        check_error_code(self._get_error_code(parsed_context))
+        self.check_error_code(self._get_error_code(parsed_context))
         return parsed_context
 
     @staticmethod
     def _get_error_code(data):
         return int(data['namesilo']['reply']['code']), \
                data['namesilo']['reply']['detail']
+
+    @staticmethod
+    def check_error_code(error_code: tuple):
+        if error_code[0] in [300, 301, 302]:
+            return exception_codes[error_code[0]]
+
+        else:
+            raise exception_codes[error_code[0]](error_code[1])
 
     def _get_content_xml(self, url):
         api_request = requests.get(os.path.join(self.__base_url, url))
@@ -321,3 +329,27 @@ class NameSilo:
         parsed_context = self._process_data(url_extend)
         amount = parsed_context['namesilo']['reply']['balance']
         return float(amount.replace(",", ""))
+
+    def add_domain_privacy(self, domain_name):
+        """
+        Adds privacy to specified domain name
+        :param str domain_name: Domain name for adding privacy
+        :return: Status of action
+        :rtype: bool
+        """
+        url_extend = f"addPrivacy?version=1&type=xml&key={self._token}&" \
+                     f"domain={domain_name}"
+        self._process_data(url_extend)
+        return True
+
+    def remove_domain_privacy(self, domain_name):
+        """
+        Removes privacy for specified domain name
+        :param str domain_name: Domain name for removing privacy
+        :return: Status of action
+        :rtype: bool
+        """
+        url_extend = f"removePrivacy?version=1&type=xml&key={self._token}&" \
+                     f"domain={domain_name}"
+        self._process_data(url_extend)
+        return True
