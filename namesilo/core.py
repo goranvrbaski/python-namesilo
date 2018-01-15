@@ -99,7 +99,6 @@ class NameSilo:
     def check_error_code(error_code: tuple):
         if error_code[0] in [300, 301, 302]:
             return exception_codes[error_code[0]]
-
         else:
             raise exception_codes[error_code[0]](error_code[1])
 

@@ -1,10 +1,14 @@
 # Python Namesilo Module
 
-![Build Status Badge][BuildStatus] ![Code Coverage Badge][CodeCov] ![PyPiVersion Badge][PyPiVersion]
+[![Build Status Badge][BuildStatus]](https://travis-ci.org/goranvrbaski/python-namesilo.svg?branch=master) 
+[![Code Coverage Badge][CodeCov]](https://codecov.io/gh/goranvrbaski/python-namesilo)
+[![PyPiVersion Badge][PyPiVersion]](https://pypi.org/project/python-namesilo)
+[![Read The Docs][ReadtheDocs]](https://python-namesilo.readthedocs.io)
+[![DonateMe][PaypalBadge]](https://paypal.me/goranvrbaski)
 
-This code is written in Python 3.6.x. If you want to contribute to this
-project feel free to contact me at any time. 
-
+This code is written in Python 3.6 If you want to contribute to this
+project feel free to contact me at any time. If you're using this module and 
+you like it, consider [buying me a beer.](https://paypal.me/goranvrbaski) :beer:
 
 ### Installation
 
@@ -17,18 +21,17 @@ pip install python-namesilo
 from namesilo.core import NameSilo
 
 client = NameSilo(token="your-token", sandbox=False)
-
 domain_available = client.check_domain("domain-to-register.com")
 
 if domain_available:
-    client.register_domain("domain-to-register.com")
-
+    print("Domain is available!")
+    client.register_domain("domain-to-register", private=1) # use whois privacy
 ```
 
 ### Functionality Status
 
 | Functionality | Description | Implemented  |
-| ------------- |:-------------:| -----:|
+| :-------------: |:-------------:| :-----:|
 | registerDomain| Register a new domain name | Yes |
 | registerDomainDrop| Register a new domain name using drop-catching | No |
 | renewDomain| Renew a domain name | Yes |
@@ -72,6 +75,8 @@ if domain_available:
 | emailVerification| Verify a Registrant email address | No |
 
 
-[BuildStatus]: https://travis-ci.org/goranvrbaski/python-namesilo.svg?branch=master
-[CodeCov]: https://codecov.io/gh/goranvrbaski/python-namesilo/branch/master/graph/badge.svg
-[PyPiVersion]: https://badge.fury.io/py/python-namesilo.svg
+[BuildStatus]: https://img.shields.io/travis/goranvrbaski/python-namesilo/master.svg?style=flat-square
+[CodeCov]: https://img.shields.io/codecov/c/github/goranvrbaski/python-namesilo/master.svg?style=flat-square
+[PyPiVersion]: https://img.shields.io/pypi/v/python-namesilo.svg?style=flat-square
+[PaypalBadge]: https://img.shields.io/badge/Donate-PayPal-green.svg?style=flat-square
+[ReadtheDocs]: https://img.shields.io/readthedocs/python-namesilo.svg?style=flat-square
