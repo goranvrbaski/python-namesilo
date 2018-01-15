@@ -9,13 +9,13 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='python-namesilo',
-    version='1.1.0',
+    version='1.1.1',
     packages=find_packages(exclude=['docs', 'tests']),
     install_requires=['requests', 'xmltodict'],
     python_requires='>=3.6',
     py_modules=['namesilo'],
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 3.6',
