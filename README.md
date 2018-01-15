@@ -3,7 +3,7 @@
 [![Build Status Badge][BuildStatus]](https://travis-ci.org/goranvrbaski/python-namesilo.svg?branch=master) 
 [![Code Coverage Badge][CodeCov]](https://codecov.io/gh/goranvrbaski/python-namesilo)
 [![PyPiVersion Badge][PyPiVersion]](https://pypi.org/project/python-namesilo)
-[![Read The Docs][ReadtheDocs]](http://python-namesilo.readthedocs.io)
+[![Read The Docs][ReadtheDocs]](https://python-namesilo.readthedocs.io)
 [![DonateMe][PaypalBadge]](https://paypal.me/goranvrbaski)
 
 This code is written in Python 3.6 If you want to contribute to this
@@ -76,7 +76,7 @@ if domain_available:
 
 
 [BuildStatus]: https://img.shields.io/travis/goranvrbaski/python-namesilo/master.svg?style=flat-square
-[CodeCov]: https://codecov.io/gh/goranvrbaski/python-namesilo/branch/master/graph/badge.svg
+[CodeCov]: https://img.shields.io/codecov/c/github/goranvrbaski/python-namesilo/master.svg?style=flat-square
 [PyPiVersion]: https://img.shields.io/pypi/v/python-namesilo.svg?style=flat-square
 [PaypalBadge]: https://img.shields.io/badge/Donate-PayPal-green.svg?style=flat-square
 [ReadtheDocs]: https://img.shields.io/readthedocs/python-namesilo.svg?style=flat-square
