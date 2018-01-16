@@ -12,6 +12,14 @@ class NameSiloTestCase(unittest.TestCase):
     def setUp(self):
         self.ns = NameSilo("name-silo-token", sandbox=True)
 
+    def test_production_api_url(self):
+        ns = NameSilo("name-silo-token", sandbox=False)
+        self.assertEqual(ns._base_url, "https://www.namesilo.com/api/")
+
+    def test_sandbox_api_url(self):
+        ns = NameSilo("name-silo-token", sandbox=True)
+        self.assertEqual(ns._base_url, "http://sandbox.namesilo.com/api/")
+
     @mock.patch('namesilo.core.NameSilo._get_error_code')
     @mock.patch('namesilo.core.NameSilo.check_error_code')
     @mock.patch('namesilo.core.NameSilo._get_content_xml')
@@ -268,6 +276,26 @@ class NameSiloTestCase(unittest.TestCase):
         self.assertTrue(self.ns.remove_domain_privacy(domain_name))
         mock_content_xml.assert_called_once_with(
             "removePrivacy?version=1&type=xml&key=name-silo-token&"
+            "domain=some-domain.com"
+        )
+
+    @mock.patch('namesilo.core.NameSilo._process_data')
+    def test_auto_renew_domain(self, mock_content_xml):
+        domain_name = "some-domain.com"
+        mock_content_xml.return_value = mocked_data
+        self.assertTrue(self.ns.auto_renew_domain(domain_name))
+        mock_content_xml.assert_called_once_with(
+            "addAutoRenewal?version=1&type=xml&key=name-silo-token&"
+            "domain=some-domain.com"
+        )
+
+    @mock.patch('namesilo.core.NameSilo._process_data')
+    def test_remove_auto_renew_domain(self, mock_content_xml):
+        domain_name = "some-domain.com"
+        mock_content_xml.return_value = mocked_data
+        self.assertTrue(self.ns.remove_auto_renew_domain(domain_name))
+        mock_content_xml.assert_called_once_with(
+            "removeAutoRenewal?version=1&type=xml&key=name-silo-token&"
             "domain=some-domain.com"
         )
 

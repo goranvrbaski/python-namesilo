@@ -81,9 +81,9 @@ class NameSilo:
         """
         self._token = token
         if sandbox:
-            self.__base_url = "http://sandbox.namesilo.com/api/"
+            self._base_url = "http://sandbox.namesilo.com/api/"
         else:
-            self.__base_url = "https://www.namesilo.com/api/"
+            self._base_url = "https://www.namesilo.com/api/"
 
     def _process_data(self, url_extend):
         parsed_context = self._get_content_xml(url_extend)
@@ -103,7 +103,7 @@ class NameSilo:
             raise exception_codes[error_code[0]](error_code[1])
 
     def _get_content_xml(self, url):
-        api_request = requests.get(os.path.join(self.__base_url, url))
+        api_request = requests.get(os.path.join(self._base_url, url))
         if api_request.status_code != 200:
             raise Exception(
                 f"API responded with status code: {api_request.status_code}"
@@ -218,6 +218,32 @@ class NameSilo:
         """
         url_extend = f"domainUnlock?version=1&type=xml&key={self._token}&" \
                      f"domain={domain_name}"
+        self._process_data(url_extend)
+        return True
+
+    def auto_renew_domain(self, domain_name: str):
+        """
+        Set auto-renew to specific domain
+
+        :param str domain_name: Domain name
+        :return: Status of action
+        :rtype: bool
+        """
+        url_extend = f"addAutoRenewal?version=1&type=xml&key={self._token}&" \
+                     f"domain={domain_name}"
+        self._process_data(url_extend)
+        return True
+
+    def remove_auto_renew_domain(self, domain_name: str):
+        """
+        Remove auto-renew to specific domain
+
+        :param str domain_name: Domain name
+        :return: Status of action
+        :rtype: bool
+        """
+        url_extend = f"removeAutoRenewal?version=1&type=xml&" \
+                     f"key={self._token}&domain={domain_name}"
         self._process_data(url_extend)
         return True
 
