@@ -17,6 +17,8 @@ install:
   - pip install -r requirements.txt
   - pip install codecov
   - pip install coverage
+  - pip install -U setuptools
+  - pip install -U wheel
 
 script:
   - coverage run tests/test_namesilo.py
@@ -28,6 +30,7 @@ deploy:
   provider: pypi
   user: goran.vrbaski
   password: $pypi_pass
+  distributions: "sdist bdist_wheel"
   on:
     tags: false
     branch: master
