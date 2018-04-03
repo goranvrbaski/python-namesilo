@@ -28,4 +28,5 @@ setup(
     author_email='vrbaski.goran@gmail.com',
     description='API wrapper for Namesilo service',
     long_description=long_description
+    long_description_content_type="text/markdown"
 )
