@@ -381,12 +381,13 @@ class NameSilo:
         self._process_data(url_extend)
         return True
 
-    def dns_list_records(self, domain_name):
+    def list_dns_records(self, domain_name):
         """
         List all DNS records for specified domain name
 
         :param str domain_name: Domain name for listing DNS records
-        :return: list
+        :return: Returns a list of DNS records for specified domain name
+        :rtype: list
         """
 
         url_extend = f"dnsListRecords?version=1&type=xml&key={self._token}" \
@@ -394,3 +395,48 @@ class NameSilo:
         parsed_context = self._process_data(url_extend)
         records = parsed_context['namesilo']['reply']['resource_record']
         return records
+
+    def add_dns_records(
+            self, domain_name, record_type, record_host, record_value,
+            ttl=7207):
+        """
+        Add DNS record to specified domain name
+
+        :param str domain_name: Domain name for adding DNS record
+        :param str record_type: The type of resources record to add
+        :param str record_host: The hostname for the new record
+        :param str record_value: The value for the resource record
+        :param int ttl: The TTL for the new record
+        :return: Returns record id for specified domain record
+        :rtype: int
+        """
+
+        url_extend = f"dnsAddRecord?version=1&type=xml&key={self._token}" \
+                     f"&domain={domain_name}&rrtype={record_type}" \
+                     f"&rrhost={record_host}&rrvalue={record_value}&rrttl={ttl}"
+        parsed_context = self._process_data(url_extend)
+        record_id = parsed_context['namesilo']['reply']['record_id']
+        return record_id
+
+    def update_dns_records(
+            self, domain_name, record_id, record_host, record_value,
+            ttl=7207):
+        """
+        Update an existing DNS resource record
+
+        :param str domain_name: Domain name for updating DNS record
+        :param int record_id: The unique ID of the resource record
+        :param str record_host: The hostname to use
+        :param str record_value: The value for the resource record
+        :param int ttl: The TTL for this record
+        :return: Returns record id for updated domain record
+        :rtype: int
+        """
+
+        url_extend = f"dnsUpdateRecord?version=1&type=xml" \
+                     f"&key={self._token}&domain={domain_name}&" \
+                     f"rrid={record_id}&rrhost={record_host}" \
+                     f"&rrvalue={record_value}&rrttl={ttl}"
+        parsed_context = self._process_data(url_extend)
+        new_record_id = parsed_context['namesilo']['reply']['record_id']
+        return new_record_id
