@@ -380,3 +380,17 @@ class NameSilo:
                      f"domain={domain_name}"
         self._process_data(url_extend)
         return True
+
+    def dns_list_records(self, domain_name):
+        """
+        List all DNS records for specified domain name
+
+        :param str domain_name: Domain name for listing DNS records
+        :return: list
+        """
+
+        url_extend = f"dnsListRecords?version=1&type=xml&key={self._token}" \
+                     f"&domain={domain_name}"
+        parsed_context = self._process_data(url_extend)
+        records = parsed_context['namesilo']['reply']['resource_record']
+        return records
