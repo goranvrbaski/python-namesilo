@@ -425,7 +425,7 @@ class NameSilo:
         Update an existing DNS resource record
 
         :param str domain_name: Domain name for updating DNS record
-        :param int record_id: The unique ID of the resource record
+        :param str record_id: The unique ID of the resource record
         :param str record_host: The hostname to use
         :param str record_value: The value for the resource record
         :param int ttl: The TTL for this record

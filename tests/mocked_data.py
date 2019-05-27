@@ -69,7 +69,16 @@ mocked_data = {
             },
             'domains': {
                 'domain': ['some-example-domain.com', 'example.com']
-            }
+            },
+            'resource_record': [
+                {
+                    'record_id': 'e3f383786a647e83c49c6082c7ce8015',
+                    'type': 'A',
+                    'host': 'some-domain.com',
+                    'value': '107.161.23.204'
+                }
+            ],
+            'record_id': 'e3f383786a647e83c49c6082c7ce8014'
         }
     }
 }
