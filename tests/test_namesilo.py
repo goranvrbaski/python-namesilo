@@ -299,6 +299,39 @@ class NameSiloTestCase(unittest.TestCase):
             "domain=some-domain.com"
         )
 
+    @mock.patch('namesilo.core.NameSilo._process_data')
+    def test_list_dns_records(self, mock_content_xml):
+        domain_name = "some-domain.com"
+        mock_content_xml.return_value = mocked_data
+        result = self.ns.list_dns_records(domain_name)
+        self.assertIsInstance(result, list)
+        self.assertListEqual(mocked_data['namesilo']['reply']['resource_record'], result)
+
+    @mock.patch('namesilo.core.NameSilo._process_data')
+    def test_add_dns_record(self, mock_content_xml):
+        mock_content_xml.return_value = mocked_data
+        record_id = self.ns.add_dns_records(
+            "some-domain.com", "A", "test.some-domain.com", "192.168.71.50", 86400
+        )
+        mock_content_xml.assert_called_once_with(
+            "dnsAddRecord?version=1&type=xml&key=name-silo-token&domain=some-domain.com&"
+            "rrtype=A&rrhost=test.some-domain.com&rrvalue=192.168.71.50&rrttl=86400"
+        )
+        self.assertEqual(record_id, 'e3f383786a647e83c49c6082c7ce8014')
+
+    @mock.patch('namesilo.core.NameSilo._process_data')
+    def test_update_dns_record(self, mock_content_xml):
+        mock_content_xml.return_value = mocked_data
+        record_id = self.ns.update_dns_records(
+            "some-domain.com", "e3f383786a647e83c49c6082c7ce8014", "test.some-domain.com", "192.168.71.55"
+        )
+        mock_content_xml.assert_called_once_with(
+            "dnsUpdateRecord?version=1&type=xml&key=name-silo-token&domain=some-domain.com&"
+            "rrid=e3f383786a647e83c49c6082c7ce8014&rrhost=test.some-domain.com&"
+            "rrvalue=192.168.71.55&rrttl=7207"
+        )
+        self.assertEqual(record_id, 'e3f383786a647e83c49c6082c7ce8014')
+
 
 if __name__ == '__main__':
     unittest.main()
