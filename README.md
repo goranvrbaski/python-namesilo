@@ -1,12 +1,11 @@
 # Python Namesilo Module
-
-[![Build Status Badge][BuildStatus]](https://travis-ci.org/goranvrbaski/python-namesilo.svg?branch=master) 
-[![Code Coverage Badge][CodeCov]](https://codecov.io/gh/goranvrbaski/python-namesilo)
 [![PyPiVersion Badge][PyPiVersion]](https://pypi.org/project/python-namesilo)
 [![Read The Docs][ReadtheDocs]](https://python-namesilo.readthedocs.io)
 [![DonateMe][PaypalBadge]](https://paypal.me/goranvrbaski)
 
-This code is written in Python 3.6 If you want to contribute to this
+This code is written in Python, and the following versions are supported: `3.6`, `3.7`, `3.8`, `3.9`, `3.10`.
+
+ If you want to contribute to this
 project feel free to contact me at any time. If you're using this module and 
 you like it, consider [buying me a beer.](https://paypal.me/goranvrbaski) :beer:
 
