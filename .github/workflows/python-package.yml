@@ -26,4 +26,5 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Run tests with coverage
         run: |
+          export PYTHONPATH=/home/runner/work/python-namesilo/python-namesilo
           coverage run tests/test_namesilo.py
