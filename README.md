@@ -3,7 +3,7 @@
 [![Read The Docs][ReadtheDocs]](https://python-namesilo.readthedocs.io)
 [![DonateMe][PaypalBadge]](https://paypal.me/goranvrbaski)
 
-This code is written in Python, and the following versions are supported: `3.6`, `3.7`, `3.8`, `3.9`, `3.10`.
+This code is written in Python, and the following versions are supported: `3.7`, `3.8`, `3.9`, `3.10`.
 
  If you want to contribute to this
 project feel free to contact me at any time. If you're using this module and 
