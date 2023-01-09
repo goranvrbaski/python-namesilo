@@ -12,7 +12,7 @@ setup(
     version='1.5.0',
     packages=find_packages(exclude=['docs', 'tests']),
     install_requires=['requests', 'xmltodict'],
-    python_requires='>=3.7,<=3.10',
+    python_requires='>=3.7',
     py_modules=['namesilo'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
