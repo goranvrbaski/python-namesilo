@@ -2,6 +2,8 @@ import os
 import requests
 import xmltodict
 
+from typing import List
+
 from namesilo.common import DomainInfo
 from namesilo.exceptions import exception_codes
 
@@ -157,7 +159,7 @@ class NameSilo:
         self._process_data(url_extend)
         return True
 
-    def list_domains(self) -> list:
+    def list_domains(self) -> List:
         """
         List all domains registered with current account
 
@@ -258,7 +260,7 @@ class NameSilo:
         parsed_content = self._process_data(url_extend)
         return parsed_content['namesilo']['reply']
 
-    def list_contacts(self) -> list[ContactModel]:
+    def list_contacts(self) -> List[ContactModel]:
         """
         Returns list of all contacts for current account
 
@@ -381,7 +383,7 @@ class NameSilo:
         self._process_data(url_extend)
         return True
 
-    def list_dns_records(self, domain_name) -> list:
+    def list_dns_records(self, domain_name) -> List:
         """
         List all DNS records for specified domain name
 
