@@ -2,7 +2,7 @@ import os
 import requests
 import xmltodict
 
-from typing import List
+from typing import List, Tuple
 
 from namesilo.common import DomainInfo
 from namesilo.exceptions import exception_codes
@@ -330,7 +330,7 @@ class NameSilo:
         parsed_context = self._process_data(url_extend)
         return parsed_context
 
-    def add_account_funds(self, amount: float, payment_id: int) -> tuple[bool, float]:
+    def add_account_funds(self, amount: float, payment_id: int) -> Tuple[bool, float]:
         """
         Adding funds to Namesilo account
 
