@@ -102,7 +102,7 @@ class NameSilo:
         else:
             raise exception_codes[error_code[0]](error_code[1])
 
-    def _get_content_xml(self, url):
+    def _get_content_xml(self, url: str) -> dict:
         api_request = requests.get(os.path.join(self._base_url, url))
         if api_request.status_code != 200:
             raise Exception(
@@ -112,7 +112,7 @@ class NameSilo:
         content = xmltodict.parse(api_request.content.decode())
         return content
 
-    def check_domain(self, domain_name):
+    def check_domain(self, domain_name: str) -> bool:
         """
         Check if domain name is available
 
@@ -128,7 +128,7 @@ class NameSilo:
 
         return False
 
-    def get_domain_info(self, domain_name):
+    def get_domain_info(self, domain_name: str) -> DomainInfo:
         """
         Returns information about specified domain
 
@@ -141,7 +141,7 @@ class NameSilo:
         parsed_content = self._process_data(url_extend)
         return DomainInfo(parsed_content)
 
-    def change_domain_nameservers(self, domain, primary_ns, secondary_ns):
+    def change_domain_nameservers(self, domain: str, primary_ns: str, secondary_ns: str) -> bool:
         """
         Change name server for specified domain
 
@@ -157,7 +157,7 @@ class NameSilo:
         self._process_data(url_extend)
         return True
 
-    def list_domains(self):
+    def list_domains(self) -> list:
         """
         List all domains registered with current account
 
@@ -168,7 +168,7 @@ class NameSilo:
         parsed_content = self._process_data(url_extend)
         return parsed_content['namesilo']['reply']['domains']['domain']
 
-    def register_domain(self, domain_name, years=1, auto_renew=0, private=0):
+    def register_domain(self, domain_name: str, years: int = 1, auto_renew: int =0, private: int = 0) -> bool:
         """
         Register a new domain name
 
@@ -185,7 +185,7 @@ class NameSilo:
         self._process_data(url_extend)
         return True
 
-    def renew_domain(self, domain_name, years=1):
+    def renew_domain(self, domain_name: str, years: int = 1) -> bool:
         """
         Renew domain name
 
@@ -199,7 +199,7 @@ class NameSilo:
         self._process_data(url_extend)
         return True
 
-    def lock_domain(self, domain_name: str):
+    def lock_domain(self, domain_name: str) -> bool:
         """
 
         :param str domain_name:
@@ -210,7 +210,7 @@ class NameSilo:
         self._process_data(url_extend)
         return True
 
-    def unlock_domain(self, domain_name: str):
+    def unlock_domain(self, domain_name: str) -> bool:
         """
 
         :param str domain_name:
@@ -221,7 +221,7 @@ class NameSilo:
         self._process_data(url_extend)
         return True
 
-    def auto_renew_domain(self, domain_name: str):
+    def auto_renew_domain(self, domain_name: str) -> bool:
         """
         Set auto-renew to specific domain
 
@@ -234,7 +234,7 @@ class NameSilo:
         self._process_data(url_extend)
         return True
 
-    def remove_auto_renew_domain(self, domain_name: str):
+    def remove_auto_renew_domain(self, domain_name: str) -> bool:
         """
         Remove auto-renew to specific domain
 
@@ -258,7 +258,7 @@ class NameSilo:
         parsed_content = self._process_data(url_extend)
         return parsed_content['namesilo']['reply']
 
-    def list_contacts(self):
+    def list_contacts(self) -> list[ContactModel]:
         """
         Returns list of all contacts for current account
 
@@ -279,7 +279,7 @@ class NameSilo:
 
         return contacts
 
-    def add_contact(self, contact):
+    def add_contact(self, contact: ContactModel) -> bool:
         """
         Adding new contact for current account
 
@@ -296,7 +296,7 @@ class NameSilo:
         self._process_data(url_extend)
         return True
 
-    def update_contact(self, contact: ContactModel):
+    def update_contact(self, contact: ContactModel) -> bool:
         """
         Update existing contact with new information
 
@@ -315,7 +315,7 @@ class NameSilo:
         self._process_data(url_extend)
         return True
 
-    def delete_contact(self, contact_id):
+    def delete_contact(self, contact_id) -> bool:
         """
         Delete contact from NameSilo account
 
@@ -328,7 +328,7 @@ class NameSilo:
         parsed_context = self._process_data(url_extend)
         return parsed_context
 
-    def add_account_funds(self, amount, payment_id):
+    def add_account_funds(self, amount: float, payment_id: int) -> tuple[bool, float]:
         """
         Adding funds to Namesilo account
 
@@ -343,7 +343,7 @@ class NameSilo:
         amount = parsed_context['namesilo']['reply']['new_balance']
         return True, float(amount.replace(",", ""))
 
-    def get_account_balance(self):
+    def get_account_balance(self) -> float:
         """
         Returns current account balance
 
@@ -355,7 +355,7 @@ class NameSilo:
         amount = parsed_context['namesilo']['reply']['balance']
         return float(amount.replace(",", ""))
 
-    def add_domain_privacy(self, domain_name):
+    def add_domain_privacy(self, domain_name: str) -> bool:
         """
         Adds privacy to specified domain name
 
@@ -368,7 +368,7 @@ class NameSilo:
         self._process_data(url_extend)
         return True
 
-    def remove_domain_privacy(self, domain_name):
+    def remove_domain_privacy(self, domain_name: str) -> bool:
         """
         Removes privacy for specified domain name
 
@@ -381,7 +381,7 @@ class NameSilo:
         self._process_data(url_extend)
         return True
 
-    def list_dns_records(self, domain_name):
+    def list_dns_records(self, domain_name) -> list:
         """
         List all DNS records for specified domain name
 
@@ -397,8 +397,13 @@ class NameSilo:
         return records
 
     def add_dns_records(
-            self, domain_name, record_type, record_host, record_value,
-            ttl=7207):
+            self,
+            domain_name: str,
+            record_type: str,
+            record_host: str,
+            record_value: str,
+            ttl: int = 7207
+    ) -> int:
         """
         Add DNS record to specified domain name
 
@@ -419,8 +424,14 @@ class NameSilo:
         return record_id
 
     def update_dns_records(
-            self, domain_name, record_id, record_host, record_value,
-            ttl=7207):
+            self,
+            domain_name:
+            str,
+            record_id: str,
+            record_host: str,
+            record_value: str,
+            ttl: int = 7207
+    ) -> int:
         """
         Update an existing DNS resource record
 
