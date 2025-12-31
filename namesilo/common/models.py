@@ -29,23 +29,6 @@ class DomainInfo:
     @classmethod
     def from_api(cls, data: dict) -> "DomainInfo":
         reply = data["reply"]
-        # test = {
-        #     'code': 300,
-        #     'detail': 'success',
-        #     'created': '2025-12-31',
-        #     'expires': '2026-12-31',
-        #     'status': 'Active',
-        #     'locked': 'Yes',
-        #     'private': 'Yes',
-        #     'auto_renew': 'No',
-        #     'traffic_type': 'Custom DNS',
-        #     'email_verification_required': 'No',
-        #     'portfolio': 'N/A',
-        #     'forward_url': 'N/A',
-        #     'forward_type': 'N/A',
-        #     'nameservers': [{'nameserver': 'gina.ns.cloudflare.com', 'position': 1}, {'nameserver': 'will.ns.cloudflare.com', 'position': 2}],
-        #     'contact_ids': {'registrant': '153920', 'administrative': '153920', 'technical': '153920', 'billing': '153920'}
-        # }
 
         return cls(
             auto_renew=reply["auto_renew"],
