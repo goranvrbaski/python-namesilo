@@ -139,7 +139,6 @@ class NameSilo:
         url_extend = f"getDomainInfo?version=1&type=json&key={self._token}&" \
                      f"domain={domain_name}"
         parsed_content = self._process_data(url_extend)
-        print(parsed_content)
         return DomainInfo.from_api(parsed_content)
 
     def change_domain_nameservers(self, domain: str, primary_ns: str, secondary_ns: str) -> bool:
