@@ -8,7 +8,8 @@ build:
 python:
   install:
     - method: pip
-      path: docs/requirements.txt
+      path: .
+      requirements: "docs/requirements.txt"
 
 sphinx:
   configuration: docs/conf.py
