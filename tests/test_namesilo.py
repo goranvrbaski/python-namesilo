@@ -301,7 +301,7 @@ class NameSiloTestCase(unittest.TestCase):
     @mock.patch("namesilo.core.NameSilo._process_data")
     def test_add_dns_record(self, mock_content_json):
         mock_content_json.return_value = mocked_data
-        record_id = self.ns.add_dns_records(
+        record_id = self.ns.add_dns_record(
             "some-domain.com", "A", "test.some-domain.com", "192.168.71.50", 86400
         )
         mock_content_json.assert_called_once_with(
@@ -313,7 +313,7 @@ class NameSiloTestCase(unittest.TestCase):
     @mock.patch("namesilo.core.NameSilo._process_data")
     def test_update_dns_record(self, mock_content_json):
         mock_content_json.return_value = mocked_data
-        record_id = self.ns.update_dns_records(
+        record_id = self.ns.update_dns_record(
             "some-domain.com",
             "e3f383786a647e83c49c6082c7ce8014",
             "test.some-domain.com",

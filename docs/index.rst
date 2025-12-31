@@ -158,7 +158,7 @@ DNS records
    records = client.list_dns_records("example.com")
    print(records)
  
-   record_id = client.add_dns_records(
+   record_id = client.add_dns_record(
        "example.com",
        record_type="A",
        record_host="@",
@@ -166,7 +166,7 @@ DNS records
        ttl=3600,
    )
  
-   client.update_dns_records(
+   client.update_dns_record(
        "example.com",
        record_id=str(record_id),
        record_host="@",
@@ -177,23 +177,86 @@ DNS records
  
 Error handling
 --------------
- 
+
 API errors are mapped to custom exceptions defined in :mod:`namesilo.exceptions`.
- 
+
 .. code-block:: python
- 
+
    from namesilo.core import NameSilo
-   from namesilo.exceptions import NameSilo as NameSiloError
- 
+   from namesilo.exceptions import (
+       APIRequestError,
+       DomainAlreadyLocked,
+       InsufficientFunds,
+       InvalidAPIKey,
+       InvalidDomainSyntax,
+       IPForbidden,
+   )
+
    client = NameSilo(token="YOUR_API_KEY", sandbox=False)
- 
+
    try:
        balance = client.get_account_balance()
-   except NameSiloError as exc:
-       # exc message is based on NameSilo API error detail
-       print(f"NameSilo API error: {exc}")
- 
- 
+   except InvalidAPIKey as exc:
+       print(f"Invalid API key: {exc}")
+   except IPForbidden as exc:
+       print(f"Your IP is not allowed to access the API: {exc}")
+   except APIRequestError as exc:
+       print(f"Request error: {exc}")
+
+   try:
+       client.lock_domain("example.com")
+   except DomainAlreadyLocked as exc:
+       print(f"Domain already locked: {exc}")
+   except InvalidDomainSyntax as exc:
+       print(f"Invalid domain syntax: {exc}")
+
+
+Available exception types
+-------------------------
+
+The following exception classes are defined in :mod:`namesilo.exceptions`:
+
+- :class:`namesilo.exceptions.HTTPSNotUsed`
+- :class:`namesilo.exceptions.NoAPIVersionSpecified`
+- :class:`namesilo.exceptions.InvalidAPIVersion`
+- :class:`namesilo.exceptions.NoTypeSpecified`
+- :class:`namesilo.exceptions.InvalidAPIType`
+- :class:`namesilo.exceptions.NoOperationSpecified`
+- :class:`namesilo.exceptions.InvalidAPIOperation`
+- :class:`namesilo.exceptions.MissingParameters`
+- :class:`namesilo.exceptions.NoApiKeySpecified`
+- :class:`namesilo.exceptions.InvalidAPIKey`
+- :class:`namesilo.exceptions.InvalidUser`
+- :class:`namesilo.exceptions.APINotAvailableSubs`
+- :class:`namesilo.exceptions.IPForbidden`
+- :class:`namesilo.exceptions.InvalidDomainSyntax`
+- :class:`namesilo.exceptions.CreditCardProfileDoesntExists`
+- :class:`namesilo.exceptions.CreditCardNotVerified`
+- :class:`namesilo.exceptions.InsufficientFunds`
+- :class:`namesilo.exceptions.APIKeyPass`
+- :class:`namesilo.exceptions.DomainNotActive`
+- :class:`namesilo.exceptions.InternalSystemError`
+- :class:`namesilo.exceptions.GeneralError`
+- :class:`namesilo.exceptions.DomainAlreadyAutoRenew`
+- :class:`namesilo.exceptions.DomainAlreadyNotAutoRenew`
+- :class:`namesilo.exceptions.DomainAlreadyLocked`
+- :class:`namesilo.exceptions.DomainAlreadyUnlocked`
+- :class:`namesilo.exceptions.NameServerUpdateError`
+- :class:`namesilo.exceptions.DomainAlreadyPrivate`
+- :class:`namesilo.exceptions.DomainAlreadyNotPrivate`
+- :class:`namesilo.exceptions.DomainProcessingError`
+- :class:`namesilo.exceptions.DomainAlreadyActiveInSystem`
+- :class:`namesilo.exceptions.InvalidNumberOfYears`
+- :class:`namesilo.exceptions.CentralRegistryNotResponding`
+- :class:`namesilo.exceptions.InvalidSandboxAccount`
+- :class:`namesilo.exceptions.DomainNotRenewed`
+- :class:`namesilo.exceptions.DomainNotTransferred`
+- :class:`namesilo.exceptions.NoDomainTransfer`
+- :class:`namesilo.exceptions.InvalidDomainNameOrExtension`
+- :class:`namesilo.exceptions.DNSModificationError`
+- :class:`namesilo.exceptions.APIRequestError`
+
+
 API reference
 -------------
  

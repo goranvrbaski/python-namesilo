@@ -424,7 +424,7 @@ class NameSilo:
         records = parsed_context["reply"]["resource_record"]
         return records
 
-    def add_dns_records(
+    def add_dns_record(
         self,
         domain_name: str,
         record_type: str,
@@ -453,7 +453,7 @@ class NameSilo:
         record_id = parsed_context["reply"]["record_id"]
         return record_id
 
-    def update_dns_records(
+    def update_dns_record(
         self,
         domain_name: str,
         record_id: str,
