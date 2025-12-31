@@ -1,6 +1,5 @@
 import os
 import requests
-import xmltodict
 
 from typing import List, Tuple
 
@@ -88,14 +87,14 @@ class NameSilo:
             self._base_url = "https://www.namesilo.com/api/"
 
     def _process_data(self, url_extend):
-        parsed_context = self._get_content_xml(url_extend)
+        parsed_context = self._get_content_json(url_extend)
         self.check_error_code(self._get_error_code(parsed_context))
         return parsed_context
 
     @staticmethod
     def _get_error_code(data):
-        return int(data['namesilo']['reply']['code']), \
-               data['namesilo']['reply']['detail']
+        return int(data['reply']['code']), \
+               data['reply']['detail']
 
     @staticmethod
     def check_error_code(error_code: tuple):
@@ -104,15 +103,14 @@ class NameSilo:
         else:
             raise exception_codes[error_code[0]](error_code[1])
 
-    def _get_content_xml(self, url: str) -> dict:
+    def _get_content_json(self, url: str) -> dict:
         api_request = requests.get(os.path.join(self._base_url, url))
         if api_request.status_code != 200:
             raise Exception(
                 f"API responded with status code: {api_request.status_code}"
             )
 
-        content = xmltodict.parse(api_request.content.decode())
-        return content
+        return api_request.json()
 
     def check_domain(self, domain_name: str) -> bool:
         """
@@ -122,10 +120,10 @@ class NameSilo:
         :return: Availability of domain
         :rtype: bool
         """
-        url_extend = f"checkRegisterAvailability?version=1&type=xml&" \
+        url_extend = f"checkRegisterAvailability?version=1&type=json&" \
                      f"key={self._token}&domains={domain_name}"
         parsed_content = self._process_data(url_extend)
-        if 'available' in parsed_content['namesilo']['reply'].keys():
+        if 'available' in parsed_content['reply'].keys():
             return True
 
         return False
@@ -138,10 +136,11 @@ class NameSilo:
         :return: domain information
         :rtype: DomainInfo
         """
-        url_extend = f"getDomainInfo?version=1&type=xml&key={self._token}&" \
+        url_extend = f"getDomainInfo?version=1&type=json&key={self._token}&" \
                      f"domain={domain_name}"
         parsed_content = self._process_data(url_extend)
-        return DomainInfo(parsed_content)
+        print(parsed_content)
+        return DomainInfo.from_api(parsed_content)
 
     def change_domain_nameservers(self, domain: str, primary_ns: str, secondary_ns: str) -> bool:
         """
@@ -154,7 +153,7 @@ class NameSilo:
         :rtype: bool
         """
         url_extend = f"changeNameServers?version=1&" \
-                     f"type=xml&key={self._token}&domain={domain}&" \
+                     f"type=json&key={self._token}&domain={domain}&" \
                      f"ns1={primary_ns}&ns2={secondary_ns}"
         self._process_data(url_extend)
         return True
@@ -166,9 +165,9 @@ class NameSilo:
         :return: list of registered domains
         :rtype: list
         """
-        url_extend = f"listDomains?version=1&type=xml&key={self._token}"
+        url_extend = f"listDomains?version=1&type=json&key={self._token}"
         parsed_content = self._process_data(url_extend)
-        return parsed_content['namesilo']['reply']['domains']['domain']
+        return parsed_content['reply']['domains']
 
     def register_domain(self, domain_name: str, years: int = 1, auto_renew: int =0, private: int = 0) -> bool:
         """
@@ -181,7 +180,7 @@ class NameSilo:
         :return: status of domain registration
         :rtype: bool
         """
-        url_extend = f"registerDomain?version=1&type=xml&key={self._token}&" \
+        url_extend = f"registerDomain?version=1&type=json&key={self._token}&" \
                      f"domain={domain_name}&years={years}&private={private}&" \
                      f"auto_renew={auto_renew}"
         self._process_data(url_extend)
@@ -196,7 +195,7 @@ class NameSilo:
         :return: status of renewal
         :rtype: bool
         """
-        url_extend = f"renewDomain?version=1&type=xml&key={self._token}&" \
+        url_extend = f"renewDomain?version=1&type=json&key={self._token}&" \
                      f"domain={domain_name}&years={years}"
         self._process_data(url_extend)
         return True
@@ -207,7 +206,7 @@ class NameSilo:
         :param str domain_name:
         :return:
         """
-        url_extend = f"domainLock?version=1&type=xml&key={self._token}&" \
+        url_extend = f"domainLock?version=1&type=json&key={self._token}&" \
                      f"domain={domain_name}"
         self._process_data(url_extend)
         return True
@@ -218,7 +217,7 @@ class NameSilo:
         :param str domain_name:
         :return:
         """
-        url_extend = f"domainUnlock?version=1&type=xml&key={self._token}&" \
+        url_extend = f"domainUnlock?version=1&type=json&key={self._token}&" \
                      f"domain={domain_name}"
         self._process_data(url_extend)
         return True
@@ -231,7 +230,7 @@ class NameSilo:
         :return: Status of action
         :rtype: bool
         """
-        url_extend = f"addAutoRenewal?version=1&type=xml&key={self._token}&" \
+        url_extend = f"addAutoRenewal?version=1&type=json&key={self._token}&" \
                      f"domain={domain_name}"
         self._process_data(url_extend)
         return True
@@ -244,7 +243,7 @@ class NameSilo:
         :return: Status of action
         :rtype: bool
         """
-        url_extend = f"removeAutoRenewal?version=1&type=xml&" \
+        url_extend = f"removeAutoRenewal?version=1&type=json&" \
                      f"key={self._token}&domain={domain_name}"
         self._process_data(url_extend)
         return True
@@ -256,9 +255,9 @@ class NameSilo:
         :return: Prices for supported TLDs
         :rtype: dict
         """
-        url_extend = f"getPrices?version=1&type=xml&key={self._token}"
+        url_extend = f"getPrices?version=1&type=json&key={self._token}"
         parsed_content = self._process_data(url_extend)
-        return parsed_content['namesilo']['reply']
+        return parsed_content['reply']
 
     def list_contacts(self) -> List[ContactModel]:
         """
@@ -268,9 +267,9 @@ class NameSilo:
         :rtype: list
         """
         contacts = []
-        url_extend = f"contactList?version=1&type=xml&key={self._token}"
+        url_extend = f"contactList?version=1&type=json&key={self._token}"
         parsed_context = self._process_data(url_extend)
-        reply = parsed_context['namesilo']['reply']['contact']
+        reply = parsed_context['reply']['contact']
 
         if isinstance(reply, list):
             for contact in reply:
@@ -289,7 +288,7 @@ class NameSilo:
         :return: Status for adding contact
         :rtype: bool
         """
-        url_extend = f"contactAdd?version=1&type=xml&key={self._token}&" \
+        url_extend = f"contactAdd?version=1&type=json&key={self._token}&" \
                      f"fn={contact.first_name}&ln={contact.last_name}&" \
                      f"ad={contact.address}&cy={contact.city}&" \
                      f"st={contact.state}&zp={contact.zip}&" \
@@ -306,7 +305,7 @@ class NameSilo:
         :return: status of action
         :rtype: bool
         """
-        url_extend = f"contactUpdate?version=1&type=xml&key={self._token}&" \
+        url_extend = f"contactUpdate?version=1&type=json&key={self._token}&" \
                      f"contact_id={contact.contact_id}&" \
                      f"fn={contact.first_name}%20{contact.last_name}&" \
                      f"ad={contact.address}&cy={contact.city}&" \
@@ -325,7 +324,7 @@ class NameSilo:
         :return:
         :rtype: None
         """
-        url_extend = f"contactDelete?version=1&type=xml&key={self._token}&" \
+        url_extend = f"contactDelete?version=1&type=json&key={self._token}&" \
                      f"contact_id={contact_id}"
         parsed_context = self._process_data(url_extend)
         return parsed_context
@@ -339,10 +338,10 @@ class NameSilo:
         :return: Status and amount after adding funds, example: (True, 150.00)
         :rtype: tuple
         """
-        url_extend = f"addAccountFunds?version=1&type=xml&key={self._token}&" \
+        url_extend = f"addAccountFunds?version=1&type=json&key={self._token}&" \
                      f"amount={amount}&payment_id={payment_id}"
         parsed_context = self._process_data(url_extend)
-        amount = parsed_context['namesilo']['reply']['new_balance']
+        amount = parsed_context['reply']['new_balance']
         return True, float(amount.replace(",", ""))
 
     def get_account_balance(self) -> float:
@@ -352,9 +351,9 @@ class NameSilo:
         :return: current account balance
         :rtype: float
         """
-        url_extend = f"getAccountBalance?version=1&type=xml&key={self._token}"
+        url_extend = f"getAccountBalance?version=1&type=json&key={self._token}"
         parsed_context = self._process_data(url_extend)
-        amount = parsed_context['namesilo']['reply']['balance']
+        amount = parsed_context['reply']['balance']
         return float(amount.replace(",", ""))
 
     def add_domain_privacy(self, domain_name: str) -> bool:
@@ -365,7 +364,7 @@ class NameSilo:
         :return: Status of action
         :rtype: bool
         """
-        url_extend = f"addPrivacy?version=1&type=xml&key={self._token}&" \
+        url_extend = f"addPrivacy?version=1&type=json&key={self._token}&" \
                      f"domain={domain_name}"
         self._process_data(url_extend)
         return True
@@ -378,7 +377,7 @@ class NameSilo:
         :return: Status of action
         :rtype: bool
         """
-        url_extend = f"removePrivacy?version=1&type=xml&key={self._token}&" \
+        url_extend = f"removePrivacy?version=1&type=json&key={self._token}&" \
                      f"domain={domain_name}"
         self._process_data(url_extend)
         return True
@@ -392,10 +391,10 @@ class NameSilo:
         :rtype: list
         """
 
-        url_extend = f"dnsListRecords?version=1&type=xml&key={self._token}" \
+        url_extend = f"dnsListRecords?version=1&type=json&key={self._token}" \
                      f"&domain={domain_name}"
         parsed_context = self._process_data(url_extend)
-        records = parsed_context['namesilo']['reply']['resource_record']
+        records = parsed_context['reply']['resource_record']
         return records
 
     def add_dns_records(
@@ -418,11 +417,11 @@ class NameSilo:
         :rtype: int
         """
 
-        url_extend = f"dnsAddRecord?version=1&type=xml&key={self._token}" \
+        url_extend = f"dnsAddRecord?version=1&type=json&key={self._token}" \
                      f"&domain={domain_name}&rrtype={record_type}" \
                      f"&rrhost={record_host}&rrvalue={record_value}&rrttl={ttl}"
         parsed_context = self._process_data(url_extend)
-        record_id = parsed_context['namesilo']['reply']['record_id']
+        record_id = parsed_context['reply']['record_id']
         return record_id
 
     def update_dns_records(
@@ -446,10 +445,10 @@ class NameSilo:
         :rtype: int
         """
 
-        url_extend = f"dnsUpdateRecord?version=1&type=xml" \
+        url_extend = f"dnsUpdateRecord?version=1&type=json" \
                      f"&key={self._token}&domain={domain_name}&" \
                      f"rrid={record_id}&rrhost={record_host}" \
                      f"&rrvalue={record_value}&rrttl={ttl}"
         parsed_context = self._process_data(url_extend)
-        new_record_id = parsed_context['namesilo']['reply']['record_id']
+        new_record_id = parsed_context['reply']['record_id']
         return new_record_id

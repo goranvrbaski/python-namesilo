@@ -11,7 +11,7 @@ setup(
     name='python-namesilo',
     version='1.7.0',
     packages=find_packages(exclude=['docs', 'tests']),
-    install_requires=['requests', 'xmltodict'],
+    install_requires=['requests'],
     python_requires='>=3.8,<=3.12',
     py_modules=['namesilo'],
     classifiers=[
