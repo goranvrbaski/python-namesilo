@@ -1,58 +1,69 @@
-__author__ = 'goran.vrbaski'
+__author__ = "goran.vrbaski"
 
 
 class NameSilo(Exception):
     """Base NameSilo exception"""
+
     pass
 
 
 class HTTPSNotUsed(NameSilo):
     """Request made without https"""
+
     pass
 
 
 class InvalidAPIVersion(NameSilo):
     """Invalid API version while making a request"""
+
     pass
 
 
 class NoTypeSpecified(NameSilo):
     """"""
+
     pass
 
 
 class InvalidAPIType(NameSilo):
     """"""
+
     pass
 
 
 class NoOperationSpecified(NameSilo):
     """"""
+
     pass
 
 
 class InvalidAPIOperation(NameSilo):
     """"""
+
     pass
 
 
 class MissingParameters(NameSilo):
     """"""
+
     pass
 
 
 class NoApiKeySpecified(NameSilo):
     """"""
+
     pass
 
 
 class InvalidAPIKey(NameSilo):
     """"""
+
     pass
 
 
 class InvalidUser(NameSilo):
     """"""
+
     pass
 
 
@@ -214,7 +225,7 @@ exception_codes = {
     300: "Successful API operation",
     301: "Successful registration, but not all provided hosts were valid resulting in our name servers being used",
     302: "Successful order, but there was an error with the contact information provided so your account default "
-         "contact profile was used (you can configure your account to reject orders with invalid contact information "
-         "via the Reseller Manager page in your account.)",
-    400: APIRequestError
+    "contact profile was used (you can configure your account to reject orders with invalid contact information "
+    "via the Reseller Manager page in your account.)",
+    400: APIRequestError,
 }

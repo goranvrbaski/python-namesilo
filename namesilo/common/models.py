@@ -1,17 +1,17 @@
 from datetime import datetime
 from dataclasses import dataclass
 
-__author__ = 'goran.vrbaski'
+__author__ = "goran.vrbaski"
 
 from typing import List
 
 
 class Contact:
     def __init__(self, data):
-        self.administrative = data['administrative']
-        self.billing = data['billing']
-        self.registrant = data['registrant']
-        self.technical = data['technical']
+        self.administrative = data["administrative"]
+        self.billing = data["billing"]
+        self.registrant = data["registrant"]
+        self.technical = data["technical"]
 
 
 @dataclass
@@ -60,11 +60,10 @@ class DomainInfo:
         )
 
 
-
 class NameServers:
     @staticmethod
     def process(data):
         ns_list = []
         for name_server in data:
-            ns_list.append(name_server['nameserver'])
+            ns_list.append(name_server["nameserver"])
         return ns_list
